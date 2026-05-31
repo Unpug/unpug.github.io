@@ -1,41 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
-  <style>
-    body { margin: 0; font-family: 'Lora', serif; display: flex; }
-
-    nav {
-      width: 160px;
-      padding: 48px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    main {
-      padding: 48px;
-      max-width: 560px;
-    }
-
-    a { color: black; text-decoration: none; }
-    a:visited { color: black; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+<style>
+  p { margin-top: 0; }
+  body { margin: 0; font-size: 16px; font-weight: 700; font-family: 'Cormorant Garamond', serif; display: flex; justify-content: center; min-height: 100vh; -webkit-font-smoothing: antialiased;}
+  .wrapper {
+    display: flex;
+    padding: 48px 0;
+    padding-top: 96px;
+  }
+  nav {
+    width: 160px;
+    padding-right: 48px;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  nav a { color: black; text-decoration: none; }
+  nav a:visited { color: black; }
+  .content { width: 500px; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .content a { color: black; text-decoration: none; }
+  .content a:visited { color: black; }
+</style>
 </head>
 <body>
-  <nav>
-    <a href="#">About</a>
-    <br>
-    <a href="https://linkedin.com/in/YOUR_LINKEDIN">LinkedIn</a>
-    <a href="https://scholar.google.com/citations?user=YOUR_ID">Google Scholar</a>
-    <a href="https://github.com/Unpug">GitHub</a>
-    <a href="mailto:YOUR_EMAIL">Email</a>
-  </nav>
+  <div class="wrapper">
+    <nav>
+      <a href="#" onclick="show('about')">About</a>
+      <a href="#" onclick="show('work')">Work</a>
+      <a href="#" onclick="show('contact')">Contact</a>
+    </nav>
 
-  <main>
-    <p>Hi, I'm AJ.</p>
-    <br>
-    <p>YOUR INTRO HERE.</p>
-  </main>
+    <div class="content">
+      <div class="page active" id="about">
+        <p>punching trees</p>
+        <br>
+        <p>I'm a student at Cornell studying electrical and computer engineering.</p>
+        <p>I contribute to Mantis AI, a cognitive cartography platform by the Kellis lab at MIT CSAIL</p>
+        <br>
+        <p>one day I may beat the dragon!</p>
+      </div>
+
+      <div class="page" id="work">
+        <p>my research can be found at my
+        <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en">Google Scholar</a></p>
+        <p>and my code is on
+        <a href="https://github.com/Unpug">GitHub</a></p>
+      </div>
+
+      <div class="page" id="contact">
+        <p>reach out to me at:</p>
+        <a href="https://linkedin.com/in/thantham">LinkedIn</a> and
+        <a href="mailto:YOUR_EMAIL">Email</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function show(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(page).classList.add('active');
+    }
+  </script>
 </body>
 </html>
