@@ -1,70 +1,542 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
+  * { box-sizing: border-box; }
   p { margin-top: 0; }
-  body { margin: 0; font-size: 16px; font-weight: 700; font-family: 'Cormorant Garamond', serif; display: flex; justify-content: center; min-height: 100vh; -webkit-font-smoothing: antialiased;}
+
+  body {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Cormorant Garamond', serif;
+    -webkit-font-smoothing: antialiased;
+    background: white;
+    min-height: 100vh;
+  }
+
+  #mc-grid {
+    position: fixed;
+    top: 0; left: 0;
+    display: grid;
+    z-index: 0;
+    user-select: none;
+  }
+
+  .cell {
+    position: relative;
+  }
+
+  .cell.broken {
+    background: #111;
+    transition: background 0s;
+  }
+
+  .particle {
+    position: fixed;
+    border-radius: 1px;
+    pointer-events: none;
+    z-index: 9999;
+    image-rendering: pixelated;
+  }
+
+  /* mole wrapper clips the canvas so rows reveal one at a time */
+  #mole-wrap {
+    position: fixed;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1000;
+    height: 0;
+  }
+  #mole-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    image-rendering: pixelated;
+  }
+
+  #site {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    pointer-events: none;
+  }
+
   .wrapper {
     display: flex;
-    padding: 48px 0;
-    padding-top: 96px;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 24px 80px;
+    width: 100%;
+    max-width: 560px;
   }
-  nav {
-    width: 160px;
-    padding-right: 48px;
-    padding-top: 0;
+
+  a { pointer-events: auto; color: black; text-decoration: none; }
+  a:visited { color: black; }
+
+  /* ── Quiz ── */
+  #quiz {
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  #quiz-intro {
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  #quiz-intro em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .question-block {
+    display: none;
+  }
+
+  .question-block.active {
+    display: block;
+  }
+
+  .question-block p {
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .options {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
-  nav a { color: black; text-decoration: none; }
-  nav a:visited { color: black; }
-  .content { width: 500px; }
-  .page { display: none; }
-  .page.active { display: block; }
-  .content a { color: black; text-decoration: none; }
-  .content a:visited { color: black; }
+
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.4;
+    transition: opacity 0.15s;
+  }
+
+  .option-label:hover { opacity: 0.6; }
+
+  .option-label input[type="radio"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+    accent-color: #111;
+  }
+
+  #quiz-nav {
+    margin-top: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #quiz-progress {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  .quiz-btn {
+    background: none;
+    border: 2px solid #111;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 8px 24px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, color 0.15s;
+    pointer-events: auto;
+  }
+
+  .quiz-btn:hover {
+    background: #111;
+    color: white;
+  }
+
+  #quiz-result {
+    margin-top: 40px;
+    display: none;
+    line-height: 1.7;
+  }
+
+  #quiz-result .type-label {
+    font-size: 28px;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  #quiz-result .type-desc {
+    font-weight: 400;
+    font-style: italic;
+  }
 </style>
 </head>
 <body>
+
+<div id="mc-grid"></div>
+
+<div id="mole-wrap"><canvas id="mole-canvas"></canvas></div>
+
+<div id="site">
   <div class="wrapper">
-    <nav>
-      <a href="#" onclick="show('about')">About</a>
-      <a href="#" onclick="show('work')">Work</a>
-      <a href="#" onclick="show('contact')">Contact</a>
-    </nav>
 
-    <div class="content">
-      <div class="page active" id="about">
-        <p>punching trees</p>
-        <br>
-        <p>I'm a student at Cornell studying electrical and computer engineering.</p>
-        <p>I contribute to Mantis AI, a cognitive cartography platform by the Kellis lab at MIT CSAIL</p>
-        <br>
-        <p>one day I may beat the dragon!</p>
+    <div id="quiz">
+      <div id="quiz-intro">
+        <p>I know you're not an E, so let me figure out the other three (that rhymes!)</p>
       </div>
 
-      <div class="page" id="work">
-        <p>my research can be found at my
-        <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en">Google Scholar</a></p>
-        <p>and my code is on
-        <a href="https://github.com/Unpug">GitHub</a></p>
+      <!-- Q1: S/N -->
+      <div class="question-block active">
+        <p>1. You're reading something dense. What do you focus on?</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q1" value="S"> The specific facts, details, and order of events</label>
+          <label class="option-label"><input type="radio" name="q1" value="N"> The patterns, implications, and what it connects to</label>
+        </div>
       </div>
 
-      <div class="page" id="contact">
-        <p>reach out to me at:</p>
-        <a href="https://linkedin.com/in/thantham">LinkedIn</a> and
-        <a href="mailto:YOUR_EMAIL">Email</a>
+      <!-- Q2: S/N -->
+      <div class="question-block">
+        <p>2. You have a free weekend with nothing scheduled. What do you do?</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q2" value="S"> Something concrete: cook, fix something, go to a specific place</label>
+          <label class="option-label"><input type="radio" name="q2" value="N"> Follow a thread: read, think, explore without a fixed destination</label>
+        </div>
+      </div>
+
+      <!-- Q3: S/N -->
+      <div class="question-block">
+        <p>3. Someone asks "what is consciousness?" Your first reaction:</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q3" value="S"> Mild impatience. I prefer questions with real, grounded answers.</label>
+          <label class="option-label"><input type="radio" name="q3" value="N"> Genuine interest. I think about things like this on my own.</label>
+        </div>
+      </div>
+
+      <!-- Q4: T/F -->
+      <div class="question-block">
+        <p>4. A close friend made a decision you think was wrong. What do you do?</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q4" value="T"> Tell them what I think, even if it's uncomfortable.</label>
+          <label class="option-label"><input type="radio" name="q4" value="F"> Ask how they're feeling first. The critique waits.</label>
+        </div>
+      </div>
+
+      <!-- Q5: T/F -->
+      <div class="question-block">
+        <p>5. You feel settled on a decision when:</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q5" value="T"> The logic holds and I've checked the trade-offs.</label>
+          <label class="option-label"><input type="radio" name="q5" value="F"> It feels right, even without a full explanation.</label>
+        </div>
+      </div>
+
+      <!-- Q6: T/F -->
+      <div class="question-block">
+        <p>6. Someone says something factually wrong in an argument. You:</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q6" value="T"> Correct it. Accuracy matters more than keeping the peace.</label>
+          <label class="option-label"><input type="radio" name="q6" value="F"> Let it pass. The relationship matters more than the point.</label>
+        </div>
+      </div>
+
+      <!-- Q7: J/P -->
+      <div class="question-block">
+        <p>7. You have a project due in two weeks. Where are you right now?</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q7" value="J"> Started. I have a plan and a rough timeline.</label>
+          <label class="option-label"><input type="radio" name="q7" value="P"> Thinking about it. I'll sit down and figure it out closer to the date.</label>
+        </div>
+      </div>
+
+      <!-- Q8: J/P -->
+      <div class="question-block">
+        <p>8. Plans change at the last minute. Your reaction:</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q8" value="J"> Thrown off. I had a clear picture and now it's gone.</label>
+          <label class="option-label"><input type="radio" name="q8" value="P"> Fine with it. Adapting is easier than sticking to a plan.</label>
+        </div>
+      </div>
+
+      <!-- Q9: J/P -->
+      <div class="question-block">
+        <p>9. Your browser tabs and workspace right now:</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q9" value="J"> Organized. I close things when I'm done with them.</label>
+          <label class="option-label"><input type="radio" name="q9" value="P"> A lot open. I'll deal with it later, or not.</label>
+        </div>
+      </div>
+
+      <!-- Q10: J/P -->
+      <div class="question-block">
+        <p>10. Which one is more true for you?</p>
+        <div class="options">
+          <label class="option-label"><input type="radio" name="q10" value="J"> I want things settled. Ambiguity takes energy.</label>
+          <label class="option-label"><input type="radio" name="q10" value="P"> I want options open. Deciding too early costs something.</label>
+        </div>
+      </div>
+
+      <div id="quiz-nav">
+        <button class="quiz-btn" id="quiz-next" onclick="nextQuestion()">next</button>
+        <span id="quiz-progress">1 / 10</span>
+      </div>
+
+      <div id="quiz-result">
+        <span class="type-label" id="result-type"></span>
+        <span class="type-desc" id="result-desc"></span>
       </div>
     </div>
-  </div>
 
-  <script>
-    function show(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(page).classList.add('active');
+  </div>
+</div>
+
+<script>
+  const questions = document.querySelectorAll('.question-block');
+  const total = questions.length;
+  let current = 0;
+
+  function nextQuestion() {
+    const qName = 'q' + (current + 1);
+    const answered = document.querySelector(`input[name="${qName}"]:checked`);
+    if (!answered) return;
+
+    questions[current].classList.remove('active');
+    current++;
+
+    if (current < total) {
+      questions[current].classList.add('active');
+      document.getElementById('quiz-progress').textContent = (current + 1) + ' / ' + total;
+      if (current === total - 1) {
+        document.getElementById('quiz-next').textContent = 'reveal';
+        document.getElementById('quiz-next').onclick = submitQuiz;
+      }
     }
-  </script>
+  }
+
+  function submitQuiz() {
+    const answered = document.querySelector(`input[name="q${total}"]:checked`);
+    if (!answered) return;
+
+    questions[current].classList.remove('active');
+    document.getElementById('quiz-nav').style.display = 'none';
+
+    const scores = { S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+    for (let i = 1; i <= total; i++) {
+      const val = document.querySelector(`input[name="q${i}"]:checked`);
+      if (val) scores[val.value]++;
+    }
+
+    const sn = scores.N >= scores.S ? 'N' : 'S';
+    const tf = scores.T >= scores.F ? 'T' : 'F';
+    const jp = scores.J >= scores.P ? 'J' : 'P';
+    const type = 'I' + sn + tf + jp;
+
+    const descs = {
+      INTJ: "The Architect. You've probably already thought three steps beyond this quiz.",
+      INTP: "The Logician. You're still deciding whether this methodology was rigorous enough.",
+      INFJ: "The Counselor. Quietly certain about things you couldn't explain if you tried.",
+      INFP: "The Mediator. You answered some of these as who you're trying to become.",
+      ISTJ: "The Inspector. Reliable, precise, quietly skeptical of all of this.",
+      ISTP: "The Craftsman. Efficient. You're already thinking about what you're doing next.",
+      ISFJ: "The Protector. You took this partly to understand someone else better.",
+      ISFP: "The Composer. Present, perceptive, slightly resistant to being categorized.",
+    };
+
+    document.getElementById('result-type').textContent = type;
+    document.getElementById('result-desc').textContent = 'Did I get it right?';
+    const result = document.getElementById('quiz-result');
+    result.style.display = 'block';
+  }
+
+  /* ── Minecraft grid ── */
+  const TARGET_COLS = 20;
+
+  let cells    = [];
+  let cellSize = 0;
+  let gridCols = 0;
+
+  function buildGrid() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    cellSize = Math.floor(vw / TARGET_COLS);
+    const cols = Math.floor(vw / cellSize);
+    gridCols = cols;
+    const rows = Math.ceil(vh / cellSize) + 1;
+
+    const grid = document.getElementById('mc-grid');
+    grid.innerHTML = '';
+    cells = [];
+
+    grid.style.width  = vw + 'px';
+    grid.style.height = (rows * cellSize) + 'px';
+    grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+    grid.style.gridTemplateRows    = `repeat(${rows}, ${cellSize}px)`;
+
+    // 7 random holes on each side margin (cols 0-2 left, cols N-3 to N-1 right)
+    // Skip row 0 so holes always have a potential neighbor above or below
+    const sideRows = rows - 2; // rows 1 .. rows-2
+    function pickSide(colPool) {
+      const candidates = [];
+      for (let r = 1; r < rows - 1; r++) {
+        for (const c of colPool) candidates.push(r * cols + c);
+      }
+      const picked = new Set();
+      while (picked.size < 7 && candidates.length > picked.size) {
+        picked.add(candidates[Math.floor(Math.random() * candidates.length)]);
+      }
+      return picked;
+    }
+    const leftHoles  = pickSide([0, 1, 2]);
+    const rightHoles = pickSide([cols - 3, cols - 2, cols - 1]);
+
+    for (let i = 0; i < cols * rows; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      if (leftHoles.has(i) || rightHoles.has(i)) {
+        cell.classList.add('broken');
+      }
+      cells.push(cell);
+      grid.appendChild(cell);
+    }
+  }
+
+  window.addEventListener('resize', buildGrid);
+  buildGrid();
+
+  /* ── Pixel mole ── */
+  const MOLE_PS = 4;
+  const MOLE_SPRITE = [
+    [0,0,1,1,1,1,1,0,0],
+    [0,1,2,2,2,2,2,1,0],
+    [1,1,2,2,2,2,2,1,1],
+    [1,2,3,2,2,2,3,2,1],
+    [1,1,2,2,4,2,2,1,1],
+    [1,1,2,4,4,4,2,1,1],
+    [0,1,1,2,2,2,1,1,0],
+    [0,0,1,1,1,1,1,0,0],
+    [0,0,0,0,0,0,0,0,0],
+  ];
+  const MOLE_COLORS = [null, '#444', '#ddd', '#000', '#999'];
+  const MOLE_COLS   = MOLE_SPRITE[0].length;
+  const MOLE_ROWS   = MOLE_SPRITE.length;
+  const MOLE_W = MOLE_COLS * MOLE_PS;
+  const MOLE_H = MOLE_ROWS * MOLE_PS;
+  const MAX_PEEK_ROWS = 5;
+  const STEP_MS = 60;
+
+  const moleWrap   = document.getElementById('mole-wrap');
+  const moleCanvas = document.getElementById('mole-canvas');
+  moleCanvas.width  = MOLE_W;
+  moleCanvas.height = MOLE_H;
+  moleWrap.style.width = MOLE_W + 'px';
+
+  function drawSprite(flipped) {
+    const ctx = moleCanvas.getContext('2d');
+    ctx.clearRect(0, 0, MOLE_W, MOLE_H);
+    const rows = flipped ? [...MOLE_SPRITE].reverse() : MOLE_SPRITE;
+    rows.forEach((row, y) => {
+      row.forEach((c, x) => {
+        if (!c) return;
+        ctx.fillStyle = MOLE_COLORS[c];
+        ctx.fillRect(x * MOLE_PS, y * MOLE_PS, MOLE_PS, MOLE_PS);
+      });
+    });
+  }
+
+  drawSprite(false);
+
+  let moleTimer    = null;
+  let moleInterval = null;
+  let moleDir      = 'bottom';
+
+  function scheduleMole() {
+    const delay = (1 + Math.random() * 9) * 1000;
+    moleTimer = setTimeout(showMole, delay);
+  }
+
+  function showMole() {
+    const options = [];
+    cells.forEach((cell, idx) => {
+      if (!cell.classList.contains('broken')) return;
+      const below = cells[idx + gridCols];
+      if (below && !below.classList.contains('broken')) {
+        options.push({ cell, dir: 'bottom' });
+      }
+      const above = cells[idx - gridCols];
+      if (above && !above.classList.contains('broken')) {
+        options.push({ cell, dir: 'top' });
+      }
+    });
+
+    if (options.length === 0) { scheduleMole(); return; }
+
+    const { cell, dir } = options[Math.floor(Math.random() * options.length)];
+    moleDir = dir;
+    const rect   = cell.getBoundingClientRect();
+    const peekPx = MAX_PEEK_ROWS * MOLE_PS;
+
+    drawSprite(dir === 'top');
+
+    moleWrap.style.left   = (rect.left + rect.width / 2 - MOLE_W / 2) + 'px';
+    moleWrap.style.height = peekPx + 'px';
+
+    let canvasTop, targetTop, step, done;
+
+    if (dir === 'bottom') {
+      moleWrap.style.top = (rect.bottom - peekPx) + 'px';
+      canvasTop = peekPx;
+      targetTop = 0;
+      step      = -MOLE_PS;
+      done      = () => canvasTop <= 0;
+    } else {
+      moleWrap.style.top = rect.top + 'px';
+      canvasTop = -(MOLE_H - MOLE_PS);
+      targetTop = -(MOLE_H - peekPx);
+      step      = +MOLE_PS;
+      done      = () => canvasTop >= targetTop;
+    }
+
+    moleCanvas.style.top = canvasTop + 'px';
+
+    moleInterval = setInterval(() => {
+      canvasTop += step;
+      moleCanvas.style.top = canvasTop + 'px';
+      if (done()) {
+        clearInterval(moleInterval);
+        moleTimer = setTimeout(retractMole, 2000);
+      }
+    }, STEP_MS);
+  }
+
+  function retractMole() {
+    const peekPx = MAX_PEEK_ROWS * MOLE_PS;
+    let canvasTop = parseInt(moleCanvas.style.top);
+    const step = moleDir === 'bottom' ? +MOLE_PS : -MOLE_PS;
+    const done = moleDir === 'bottom'
+      ? () => canvasTop >= peekPx
+      : () => canvasTop <= -MOLE_H;
+
+    moleInterval = setInterval(() => {
+      canvasTop += step;
+      moleCanvas.style.top = canvasTop + 'px';
+      if (done()) {
+        clearInterval(moleInterval);
+        scheduleMole();
+      }
+    }, STEP_MS);
+  }
+
+  scheduleMole();
+</script>
 </body>
 </html>
