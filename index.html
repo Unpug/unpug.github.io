@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   p { margin-top: 0; }
@@ -27,12 +27,35 @@
 
   .cell {
     position: relative;
+    cursor: crosshair;
   }
-
-  .cell.broken {
+  .cell:hover    { background: rgba(0,0,0,0.04); }
+  .cell.breaking { background: rgba(0,0,0,0.12); }
+  .cell.broken   {
     background: #111;
+    cursor: default;
     transition: background 0s;
   }
+  .cell.regen {
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: background 1.8s ease-out, box-shadow 1.8s ease-out;
+    cursor: crosshair;
+  }
+
+  .cell .pr-wrap {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .cell .pr-wrap span {
+    position: absolute;
+    background: #444;
+  }
+  .cell .pr-t { top: 0;    left: 0;   height: 3px; width: 0; }
+  .cell .pr-r { top: 0;    right: 0;  width: 3px;  height: 0; }
+  .cell .pr-b { bottom: 0; right: 0;  height: 3px; width: 0; }
+  .cell .pr-l { bottom: 0; left: 0;   width: 3px;  height: 0; }
 
   .particle {
     position: fixed;
@@ -46,9 +69,10 @@
   #mole-wrap {
     position: fixed;
     overflow: hidden;
-    pointer-events: none;
+    pointer-events: none; /* enabled from JS only when mole is peeking */
     z-index: 1000;
     height: 0;
+    cursor: crosshair;
   }
   #mole-canvas {
     position: absolute;
@@ -67,303 +91,170 @@
 
   .wrapper {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 80px 24px 80px;
-    width: 100%;
-    max-width: 560px;
+    padding: 48px 0;
+    padding-top: 96px;
   }
 
-  a { pointer-events: auto; color: black; text-decoration: none; }
-  a:visited { color: black; }
+  nav {
+    width: 160px;
+    padding-right: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-  /* ── Quiz ── */
-  #quiz {
-    width: 100%;
+  a { pointer-events: auto; }
+  nav a { color: black; text-decoration: none; }
+  nav a:visited { color: black; }
+
+  /* contact dropdown */
+  .contact-wrap {
+    position: relative;   /* anchors the absolute dropdown */
+    pointer-events: auto;
+    cursor: default;
+    user-select: none;
+  }
+
+  .contact-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .contact-arrow {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .contact-wrap.open .contact-arrow,
+  .contact-wrap.closing .contact-arrow {
+    opacity: 1;
+  }
+
+  .contact-dropdown {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+    pointer-events: none;
+  }
+
+  /* allow the dropdown container to receive mouse events while open */
+  .contact-wrap.open .contact-dropdown,
+  .contact-wrap.closing .contact-dropdown {
     pointer-events: auto;
   }
 
-  #quiz-intro {
-    margin-bottom: 40px;
-    line-height: 1.6;
+  .contact-dropdown a {
+    color: black;
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(-3px);
+    transition: opacity 0s, transform 0s;
+    pointer-events: none;
   }
 
-  #quiz-intro em {
-    font-style: italic;
-    font-weight: 400;
-  }
-
-  .question-block {
-    display: none;
-  }
-
-  .question-block.active {
-    display: block;
-  }
-
-  .question-block p {
-    margin-bottom: 16px;
-    line-height: 1.5;
-  }
-
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .option-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    cursor: pointer;
-    font-weight: 400;
-    font-style: italic;
-    line-height: 1.4;
-    transition: opacity 0.15s;
-  }
-
-  .option-label:hover { opacity: 0.6; }
-
-  .option-label input[type="radio"] {
-    margin-top: 3px;
-    flex-shrink: 0;
-    accent-color: #111;
-  }
-
-  #quiz-nav {
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  #quiz-progress {
-    font-weight: 400;
-    font-style: italic;
-    font-size: 14px;
-    opacity: 0.5;
-  }
-
-  .quiz-btn {
-    background: none;
-    border: 2px solid #111;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 8px 24px;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: background 0.15s, color 0.15s;
+  /* ── open: fade in top → bottom ── */
+  .contact-wrap.open .contact-dropdown a {
+    opacity: 1;
+    transform: translateY(0);
     pointer-events: auto;
+    transition: opacity 0.18s ease, transform 0.18s ease;
   }
+  .contact-wrap.open .contact-dropdown a:nth-child(1) { transition-delay: 0s; }
+  .contact-wrap.open .contact-dropdown a:nth-child(2) { transition-delay: 0.07s; }
+  .contact-wrap.open .contact-dropdown a:nth-child(3) { transition-delay: 0.14s; }
+  .contact-wrap.open .contact-dropdown a:nth-child(4) { transition-delay: 0.21s; }
 
-  .quiz-btn:hover {
-    background: #111;
-    color: white;
+  /* ── closing: fade out bottom → top ── */
+  .contact-wrap.closing .contact-dropdown a {
+    opacity: 0;
+    transform: translateY(-3px);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
   }
+  .contact-wrap.closing .contact-dropdown a:nth-child(4) { transition-delay: 0s; }
+  .contact-wrap.closing .contact-dropdown a:nth-child(3) { transition-delay: 0.07s; }
+  .contact-wrap.closing .contact-dropdown a:nth-child(2) { transition-delay: 0.14s; }
+  .contact-wrap.closing .contact-dropdown a:nth-child(1) { transition-delay: 0.21s; }
 
-  #quiz-result {
-    margin-top: 40px;
-    display: none;
-    line-height: 1.7;
-  }
-
-  #quiz-result .type-label {
-    font-size: 28px;
-    letter-spacing: 0.12em;
-    display: block;
-    margin-bottom: 12px;
-  }
-
-  #quiz-result .type-desc {
-    font-weight: 400;
-    font-style: italic;
-  }
+  .content { width: 500px; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .content a { color: black; text-decoration: none; }
+  .content a:visited { color: black; }
 </style>
 </head>
 <body>
 
 <div id="mc-grid"></div>
-
 <div id="mole-wrap"><canvas id="mole-canvas"></canvas></div>
 
 <div id="site">
   <div class="wrapper">
-
-    <div id="quiz">
-      <div id="quiz-intro">
-        <p>I know you're not an E, so let me figure out the other three (that rhymes!)</p>
-      </div>
-
-      <!-- Q1: S/N -->
-      <div class="question-block active">
-        <p>1. You're reading something dense. What do you focus on?</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q1" value="S"> The specific facts, details, and order of events</label>
-          <label class="option-label"><input type="radio" name="q1" value="N"> The patterns, implications, and what it connects to</label>
+    <nav>
+      <a href="#" onclick="show('about'); return false;">About</a>
+      <a href="#" onclick="show('work'); return false;">Work</a>
+      <div class="contact-wrap">
+        <div class="contact-label">Contact <span class="contact-arrow">›</span></div>
+        <div class="contact-dropdown">
+          <a href="https://linkedin.com/in/thantham" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+          <a href="mailto:thantham61@gmail.com" target="_blank">Email</a>
         </div>
       </div>
+    </nav>
 
-      <!-- Q2: S/N -->
-      <div class="question-block">
-        <p>2. You have a free weekend with nothing scheduled. What do you do?</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q2" value="S"> Something concrete: cook, fix something, go to a specific place</label>
-          <label class="option-label"><input type="radio" name="q2" value="N"> Follow a thread: read, think, explore without a fixed destination</label>
-        </div>
+    <div class="content">
+      <div class="page active" id="about">
+        <p>don't be afraid to break things</p>
+        <br>
+        <p>I'm a student at Cornell studying electrical and computer engineering.</p>
+        <br>
+        <p>I contribute to Mantis AI, a cognitive cartography platform by the Kellis lab at MIT CSAIL</p>
       </div>
 
-      <!-- Q3: S/N -->
-      <div class="question-block">
-        <p>3. Someone asks "what is consciousness?" Your first reaction:</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q3" value="S"> Mild impatience. I prefer questions with real, grounded answers.</label>
-          <label class="option-label"><input type="radio" name="q3" value="N"> Genuine interest. I think about things like this on my own.</label>
-        </div>
-      </div>
-
-      <!-- Q4: T/F -->
-      <div class="question-block">
-        <p>4. A close friend made a decision you think was wrong. What do you do?</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q4" value="T"> Tell them what I think, even if it's uncomfortable.</label>
-          <label class="option-label"><input type="radio" name="q4" value="F"> Ask how they're feeling first. The critique waits.</label>
-        </div>
-      </div>
-
-      <!-- Q5: T/F -->
-      <div class="question-block">
-        <p>5. You feel settled on a decision when:</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q5" value="T"> The logic holds and I've checked the trade-offs.</label>
-          <label class="option-label"><input type="radio" name="q5" value="F"> It feels right, even without a full explanation.</label>
-        </div>
-      </div>
-
-      <!-- Q6: T/F -->
-      <div class="question-block">
-        <p>6. Someone says something factually wrong in an argument. You:</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q6" value="T"> Correct it. Accuracy matters more than keeping the peace.</label>
-          <label class="option-label"><input type="radio" name="q6" value="F"> Let it pass. The relationship matters more than the point.</label>
-        </div>
-      </div>
-
-      <!-- Q7: J/P -->
-      <div class="question-block">
-        <p>7. You have a project due in two weeks. Where are you right now?</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q7" value="J"> Started. I have a plan and a rough timeline.</label>
-          <label class="option-label"><input type="radio" name="q7" value="P"> Thinking about it. I'll sit down and figure it out closer to the date.</label>
-        </div>
-      </div>
-
-      <!-- Q8: J/P -->
-      <div class="question-block">
-        <p>8. Plans change at the last minute. Your reaction:</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q8" value="J"> Thrown off. I had a clear picture and now it's gone.</label>
-          <label class="option-label"><input type="radio" name="q8" value="P"> Fine with it. Adapting is easier than sticking to a plan.</label>
-        </div>
-      </div>
-
-      <!-- Q9: J/P -->
-      <div class="question-block">
-        <p>9. Your browser tabs and workspace right now:</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q9" value="J"> Organized. I close things when I'm done with them.</label>
-          <label class="option-label"><input type="radio" name="q9" value="P"> A lot open. I'll deal with it later, or not.</label>
-        </div>
-      </div>
-
-      <!-- Q10: J/P -->
-      <div class="question-block">
-        <p>10. Which one is more true for you?</p>
-        <div class="options">
-          <label class="option-label"><input type="radio" name="q10" value="J"> I want things settled. Ambiguity takes energy.</label>
-          <label class="option-label"><input type="radio" name="q10" value="P"> I want options open. Deciding too early costs something.</label>
-        </div>
-      </div>
-
-      <div id="quiz-nav">
-        <button class="quiz-btn" id="quiz-next" onclick="nextQuestion()">next</button>
-        <span id="quiz-progress">1 / 10</span>
-      </div>
-
-      <div id="quiz-result">
-        <span class="type-label" id="result-type"></span>
-        <span class="type-desc" id="result-desc"></span>
+      <div class="page" id="work">
+        <p>my research can be found at my
+        <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a></p>
+        <p>and my code is on
+        <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a></p>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-  const questions = document.querySelectorAll('.question-block');
-  const total = questions.length;
-  let current = 0;
-
-  function nextQuestion() {
-    const qName = 'q' + (current + 1);
-    const answered = document.querySelector(`input[name="${qName}"]:checked`);
-    if (!answered) return;
-
-    questions[current].classList.remove('active');
-    current++;
-
-    if (current < total) {
-      questions[current].classList.add('active');
-      document.getElementById('quiz-progress').textContent = (current + 1) + ' / ' + total;
-      if (current === total - 1) {
-        document.getElementById('quiz-next').textContent = 'reveal';
-        document.getElementById('quiz-next').onclick = submitQuiz;
-      }
-    }
-  }
-
-  function submitQuiz() {
-    const answered = document.querySelector(`input[name="q${total}"]:checked`);
-    if (!answered) return;
-
-    questions[current].classList.remove('active');
-    document.getElementById('quiz-nav').style.display = 'none';
-
-    const scores = { S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
-    for (let i = 1; i <= total; i++) {
-      const val = document.querySelector(`input[name="q${i}"]:checked`);
-      if (val) scores[val.value]++;
-    }
-
-    const sn = scores.N >= scores.S ? 'N' : 'S';
-    const tf = scores.T >= scores.F ? 'T' : 'F';
-    const jp = scores.J >= scores.P ? 'J' : 'P';
-    const type = 'I' + sn + tf + jp;
-
-    const descs = {
-      INTJ: "The Architect. You've probably already thought three steps beyond this quiz.",
-      INTP: "The Logician. You're still deciding whether this methodology was rigorous enough.",
-      INFJ: "The Counselor. Quietly certain about things you couldn't explain if you tried.",
-      INFP: "The Mediator. You answered some of these as who you're trying to become.",
-      ISTJ: "The Inspector. Reliable, precise, quietly skeptical of all of this.",
-      ISTP: "The Craftsman. Efficient. You're already thinking about what you're doing next.",
-      ISFJ: "The Protector. You took this partly to understand someone else better.",
-      ISFP: "The Composer. Present, perceptive, slightly resistant to being categorized.",
-    };
-
-    document.getElementById('result-type').textContent = type;
-    document.getElementById('result-desc').textContent = 'Did I get it right?';
-    const result = document.getElementById('quiz-result');
-    result.style.display = 'block';
+  /* ── Nav ── */
+  function show(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(page).classList.add('active');
   }
 
   /* ── Minecraft grid ── */
-  const TARGET_COLS = 20;
+  const TARGET_COLS    = 20;
+  const HOLD_DURATION  = 200;
+  const REGEN_DELAY    = 300;
+  const PARTICLE_COLORS = ['#888','#777','#666','#999','#555','#aaa','#444'];
 
   let cells    = [];
   let cellSize = 0;
   let gridCols = 0;
+  const holding = {};
+  const regenTimers = {};
+
+  function isBehindText(cell) {
+    const wrapper = document.querySelector('.wrapper');
+    if (!wrapper) return false;
+    const cr = cell.getBoundingClientRect();
+    const wr = wrapper.getBoundingClientRect();
+    return !(cr.right < wr.left || cr.left > wr.right ||
+             cr.bottom < wr.top || cr.top > wr.bottom);
+  }
 
   function buildGrid() {
     const vw = window.innerWidth;
@@ -376,45 +267,171 @@
     const grid = document.getElementById('mc-grid');
     grid.innerHTML = '';
     cells = [];
+    Object.keys(holding).forEach(i => cancelHold(parseInt(i)));
+    Object.values(regenTimers).forEach(clearTimeout);
 
     grid.style.width  = vw + 'px';
     grid.style.height = (rows * cellSize) + 'px';
     grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
     grid.style.gridTemplateRows    = `repeat(${rows}, ${cellSize}px)`;
 
-    // 7 random holes on each side margin (cols 0-2 left, cols N-3 to N-1 right)
-    // Skip row 0 so holes always have a potential neighbor above or below
-    const sideRows = rows - 2; // rows 1 .. rows-2
-    function pickSide(colPool) {
-      const candidates = [];
-      for (let r = 1; r < rows - 1; r++) {
-        for (const c of colPool) candidates.push(r * cols + c);
-      }
-      const picked = new Set();
-      while (picked.size < 7 && candidates.length > picked.size) {
-        picked.add(candidates[Math.floor(Math.random() * candidates.length)]);
-      }
-      return picked;
-    }
-    const leftHoles  = pickSide([0, 1, 2]);
-    const rightHoles = pickSide([cols - 3, cols - 2, cols - 1]);
-
     for (let i = 0; i < cols * rows; i++) {
       const cell = document.createElement('div');
       cell.className = 'cell';
-      if (leftHoles.has(i) || rightHoles.has(i)) {
-        cell.classList.add('broken');
-      }
+      const wrap = document.createElement('div');
+      wrap.className = 'pr-wrap';
+      ['pr-t','pr-r','pr-b','pr-l'].forEach(cls => {
+        const s = document.createElement('span');
+        s.className = cls;
+        wrap.appendChild(s);
+      });
+      cell.appendChild(wrap);
+
+      cell.addEventListener('mousedown', e => { if (e.button === 0) startHold(i, cell); });
+      cell.addEventListener('mouseup',    () => cancelHold(i));
+      cell.addEventListener('mouseleave', () => cancelHold(i));
+      cell.addEventListener('contextmenu', e => e.preventDefault());
+
       cells.push(cell);
       grid.appendChild(cell);
     }
   }
 
-  window.addEventListener('resize', buildGrid);
+  function setRing(cell, pct) {
+    const p = pct * 4;
+    const [t, r, b, l] = cell.querySelectorAll('.pr-wrap span');
+    t.style.width  = (Math.min(p, 1) * 100) + '%';
+    r.style.height = (Math.max(0, Math.min(p - 1, 1)) * 100) + '%';
+    b.style.width  = (Math.max(0, Math.min(p - 2, 1)) * 100) + '%';
+    l.style.height = (Math.max(0, Math.min(p - 3, 1)) * 100) + '%';
+  }
+
+  function startHold(i, cell) {
+    if (holding[i]) return;
+    if (regenTimers[i]) {
+      clearTimeout(regenTimers[i]);
+      delete regenTimers[i];
+      cell.classList.remove('regen', 'broken');
+    }
+    if (cell.classList.contains('broken')) return;
+
+    cell.classList.add('breaking');
+    const start = performance.now();
+
+    function tick(now) {
+      const pct = Math.min((now - start) / HOLD_DURATION, 1);
+      setRing(cell, pct);
+      if (pct < 1) {
+        holding[i].raf = requestAnimationFrame(tick);
+      } else {
+        breakBlock(i, cell);
+      }
+    }
+
+    holding[i] = { raf: requestAnimationFrame(tick) };
+  }
+
+  function cancelHold(i) {
+    if (!holding[i]) return;
+    cancelAnimationFrame(holding[i].raf);
+    delete holding[i];
+    const cell = cells[i];
+    if (cell && !cell.classList.contains('broken')) {
+      cell.classList.remove('breaking');
+      setRing(cell, 0);
+    }
+  }
+
+  function breakBlock(i, cell) {
+    cancelAnimationFrame(holding[i]?.raf);
+    delete holding[i];
+    cell.classList.remove('breaking');
+    cell.classList.add('broken');
+    setRing(cell, 0);
+    spawnParticles(cell);
+
+    if (isBehindText(cell)) {
+      regenTimers[i] = setTimeout(() => {
+        delete regenTimers[i];
+        cell.classList.remove('broken');
+        cell.classList.add('regen');
+        cell.addEventListener('transitionend', function cleanup() {
+          cell.classList.remove('regen');
+          cell.removeEventListener('transitionend', cleanup);
+        });
+      }, REGEN_DELAY);
+    }
+  }
+
+  function spawnParticles(cell) {
+    const rect  = cell.getBoundingClientRect();
+    const cx    = rect.left + rect.width  / 2;
+    const cy    = rect.top  + rect.height / 2;
+    const count = 10 + Math.floor(Math.random() * 6);
+
+    for (let p = 0; p < count; p++) {
+      const el   = document.createElement('div');
+      el.className = 'particle';
+      const size = 4 + Math.floor(Math.random() * 6);
+      el.style.width      = size + 'px';
+      el.style.height     = size + 'px';
+      el.style.background = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+      el.style.left = cx + 'px';
+      el.style.top  = cy + 'px';
+      document.body.appendChild(el);
+
+      const angle    = Math.random() * Math.PI * 2;
+      const speed    = 60 + Math.random() * 100;
+      const vx       = Math.cos(angle) * speed;
+      const vy       = Math.sin(angle) * speed - 80;
+      const gravity  = 280;
+      const duration = 0.5 + Math.random() * 0.3;
+      const start    = performance.now();
+
+      (function animate(now) {
+        const t = (now - start) / 1000;
+        if (t > duration) { el.remove(); return; }
+        el.style.left    = (cx + vx * t) + 'px';
+        el.style.top     = (cy + vy * t + 0.5 * gravity * t * t) + 'px';
+        el.style.opacity = 1 - t / duration;
+        requestAnimationFrame(animate);
+      })(performance.now());
+    }
+  }
+
+  window.addEventListener('mouseup',  () => Object.keys(holding).forEach(i => cancelHold(parseInt(i))));
+  window.addEventListener('resize',   buildGrid);
   buildGrid();
 
+  /* ── Contact dropdown ── */
+  const contactWrap = document.querySelector('.contact-wrap');
+  let contactCloseTimer = null;
+  const CLOSE_DURATION = (0.21 + 0.18) * 1000 + 40;
+
+  function openContact() {
+    clearTimeout(contactCloseTimer);
+    contactWrap.classList.remove('closing');
+    contactWrap.classList.add('open');
+  }
+
+  function closeContact() {
+    contactWrap.classList.remove('open');
+    contactWrap.classList.add('closing');
+    contactCloseTimer = setTimeout(() => {
+      contactWrap.classList.remove('closing');
+    }, CLOSE_DURATION);
+  }
+
+  const contactDropdown = document.querySelector('.contact-dropdown');
+
+  contactWrap.addEventListener('mouseenter', openContact);
+  contactWrap.addEventListener('mouseleave', closeContact);
+  contactDropdown.addEventListener('mouseenter', openContact);
+  contactDropdown.addEventListener('mouseleave', closeContact);
+
   /* ── Pixel mole ── */
-  const MOLE_PS = 4;
+  // 9x9 sprite: 0=transparent, 1=dark gray, 2=light gray body, 3=black eye, 4=mid gray nose
+  const MOLE_PS = 4; // canvas px per sprite pixel
   const MOLE_SPRITE = [
     [0,0,1,1,1,1,1,0,0],
     [0,1,2,2,2,2,2,1,0],
@@ -431,8 +448,8 @@
   const MOLE_ROWS   = MOLE_SPRITE.length;
   const MOLE_W = MOLE_COLS * MOLE_PS;
   const MOLE_H = MOLE_ROWS * MOLE_PS;
-  const MAX_PEEK_ROWS = 5;
-  const STEP_MS = 60;
+  const MAX_PEEK_ROWS = 5; // sprite rows revealed at full peek
+  const STEP_MS = 60;      // ms per sprite-pixel-row reveal step
 
   const moleWrap   = document.getElementById('mole-wrap');
   const moleCanvas = document.getElementById('mole-canvas');
@@ -458,6 +475,77 @@
   let moleTimer    = null;
   let moleInterval = null;
   let moleDir      = 'bottom';
+  let moleVisible  = false;
+  let molePeekCell = null;
+  let waveTimeouts = [];
+
+  /* ── Click the mole ── */
+  moleWrap.addEventListener('click', () => {
+    if (moleVisible) catchMole();
+  });
+
+  function catchMole() {
+    moleVisible = false;
+    clearInterval(moleInterval);
+    clearTimeout(moleTimer);
+    moleWrap.style.height        = '0px';
+    moleWrap.style.pointerEvents = 'none';
+
+    const originCell = molePeekCell;
+    molePeekCell = null;
+
+    waveTimeouts.forEach(clearTimeout);
+    waveTimeouts = [];
+
+    if (!originCell) { scheduleMole(); return; }
+
+    const originIdx = cells.indexOf(originCell);
+    const originCol = originIdx % gridCols;
+    const originRow = Math.floor(originIdx / gridCols);
+
+    const CELL_MS = 30;
+    const HOLD_MS = 80;
+    const FADE_MS = 700;
+    let maxDelay = 0;
+
+    cells.forEach((cell, idx) => {
+      const col  = idx % gridCols;
+      const row  = Math.floor(idx / gridCols);
+      const dist = Math.sqrt((col - originCol) ** 2 + (row - originRow) ** 2);
+      const delay = Math.round(dist * CELL_MS);
+      if (delay > maxDelay) maxDelay = delay;
+
+      const gray  = Math.min(20 + Math.round(dist * 16), 220);
+      const color = `rgb(${gray},${gray},${gray})`;
+
+      const t1 = setTimeout(() => {
+        cell.style.transition = 'background 0.04s';
+        cell.style.background = color;
+      }, delay);
+
+      const t2 = setTimeout(() => {
+        cell.style.transition = `background ${FADE_MS}ms ease-out`;
+        cell.style.background = '#fff';
+      }, delay + HOLD_MS);
+
+      const t3 = setTimeout(() => {
+        cell.classList.remove('broken', 'regen', 'breaking');
+        cell.style.transition = '';
+        cell.style.background = '';
+        setRing(cell, 0);
+        if (regenTimers[idx]) { clearTimeout(regenTimers[idx]); delete regenTimers[idx]; }
+      }, delay + HOLD_MS + FADE_MS + 50);
+
+      waveTimeouts.push(t1, t2, t3);
+    });
+
+    const t4 = setTimeout(scheduleMole, maxDelay + HOLD_MS + FADE_MS + 400);
+    waveTimeouts.push(t4);
+  }
+
+  function brokenCells() {
+    return cells.filter(c => c.classList.contains('broken'));
+  }
 
   function scheduleMole() {
     const delay = (1 + Math.random() * 9) * 1000;
@@ -468,10 +556,12 @@
     const options = [];
     cells.forEach((cell, idx) => {
       if (!cell.classList.contains('broken')) return;
+      // bottom peek: neighbor below must exist and be white
       const below = cells[idx + gridCols];
       if (below && !below.classList.contains('broken')) {
         options.push({ cell, dir: 'bottom' });
       }
+      // top peek: neighbor above must exist and be white
       const above = cells[idx - gridCols];
       if (above && !above.classList.contains('broken')) {
         options.push({ cell, dir: 'top' });
@@ -481,11 +571,14 @@
     if (options.length === 0) { scheduleMole(); return; }
 
     const { cell, dir } = options[Math.floor(Math.random() * options.length)];
-    moleDir = dir;
+    moleDir      = dir;
+    molePeekCell = cell;
+    moleVisible  = true;
+    moleWrap.style.pointerEvents = 'auto';
     const rect   = cell.getBoundingClientRect();
     const peekPx = MAX_PEEK_ROWS * MOLE_PS;
 
-    drawSprite(dir === 'top');
+    drawSprite(dir === 'top'); // flipped for ceiling peek
 
     moleWrap.style.left   = (rect.left + rect.width / 2 - MOLE_W / 2) + 'px';
     moleWrap.style.height = peekPx + 'px';
@@ -493,14 +586,17 @@
     let canvasTop, targetTop, step, done;
 
     if (dir === 'bottom') {
+      // wrapper at bottom of cell; canvas slides UP (peekPx → 0)
       moleWrap.style.top = (rect.bottom - peekPx) + 'px';
       canvasTop = peekPx;
       targetTop = 0;
       step      = -MOLE_PS;
       done      = () => canvasTop <= 0;
     } else {
+      // wrapper at top of cell; canvas starts above and slides DOWN
+      // head tip (at canvas bottom in flipped sprite) appears first at ceiling edge
       moleWrap.style.top = rect.top + 'px';
-      canvasTop = -(MOLE_H - MOLE_PS);
+      canvasTop = -(MOLE_H - MOLE_PS); // only 1 row (head tip) would be visible at start
       targetTop = -(MOLE_H - peekPx);
       step      = +MOLE_PS;
       done      = () => canvasTop >= targetTop;
@@ -519,6 +615,8 @@
   }
 
   function retractMole() {
+    moleVisible  = false;
+    moleWrap.style.pointerEvents = 'none';
     const peekPx = MAX_PEEK_ROWS * MOLE_PS;
     let canvasTop = parseInt(moleCanvas.style.top);
     const step = moleDir === 'bottom' ? +MOLE_PS : -MOLE_PS;
