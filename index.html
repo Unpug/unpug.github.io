@@ -92,7 +92,7 @@
   .wrapper {
     display: flex;
     padding: 48px 0;
-    padding-top: 96px;
+    padding-top: 140px;
   }
 
   nav {
@@ -186,12 +186,80 @@
   .page.active { display: block; }
   .content a { color: black; text-decoration: none; }
   .content a:visited { color: black; }
+  .content a.ref {
+    text-decoration: underline dotted #555;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+
+  #quote-overlay {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 20;
+    max-width: 600px;
+    width: 90%;
+    line-height: 1.8;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    pointer-events: none;
+  }
+
+  #quote-overlay .quote-text {
+    margin: 0;
+  }
+
+  #quote-overlay .quote-attr {
+    margin-top: 20px;
+    opacity: 0.6;
+    font-size: 14px;
+  }
+
+  #conway-veil {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 5;
+    opacity: 1;
+    transition: opacity 1.6s ease;
+    pointer-events: none;
+  }
+
+  #back-btn {
+    display: none;
+    position: fixed;
+    top: 96px;
+    left: calc(50% - 330px);
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 25;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    align-items: center;
+    gap: 5px;
+    pointer-events: auto;
+    user-select: none;
+  }
 </style>
 </head>
 <body>
 
 <div id="mc-grid"></div>
 <div id="mole-wrap"><canvas id="mole-canvas"></canvas></div>
+<div id="conway-veil"></div>
+<div id="back-btn">&#8592; Back</div>
+<div id="quote-overlay">
+  <p class="quote-text">"You don't educate people by telling them useful things; you educate people by telling them interesting things"</p>
+  <p class="quote-attr">— John Conway</p>
+</div>
 
 <div id="site">
   <div class="wrapper">
@@ -211,12 +279,17 @@
 
     <div class="content">
       <div class="page active" id="about">
-        <p>don't be afraid to break things</p>
-        <br>
-        <p>I'm a student at Cornell studying electrical and computer engineering.</p>
-        <br>
-        <p>I contribute to Mantis AI, a cognitive cartography platform by the Kellis lab at MIT CSAIL</p>
-      </div>
+  <p>don't be afraid to break things</p>
+  <br>
+  <p>I'm interested in any kind of research, especially machine intelligence and interpretability. I'm working on <a class="ref" href="https://mantis.csail.mit.edu/" target="_blank" rel="noopener">Mantis</a>, a cognitive cartography platform by the Kellis Lab at MIT CSAIL.</p>
+  <br>
+  <p>Previously, I skipped two years of high school, spending one of which conducting research on solar cells. I also spent a summer at Wolfram and Euler Circle learning about <a class="ref" href="https://community.wolfram.com/groups/-/m/t/3503509" target="_blank" rel="noopener">cellular automata</a> and <a class="ref" href="https://www.researchgate.net/publication/396479001" target="_blank" rel="noopener">differential geometry</a>.</p>
+  <br>
+  <p>I grew up in Thailand and lived in a military camp. My time was spent chasing whatever I find interesting. I competed in olympiads, enjoyed science fairs, stumbled into research, then taught myself mental chess and blindfolded piano! I LOVE Minecraft and gummy bears. I'm currently learning how to shuffle cards in cool ways and wonder if a robot can do it...</p>
+  <br>
+  <p>I love fundamental questions and the endless forms they come in. I think it's comforting knowing that the mind is capable of so much more than itself.</p>
+  <br>
+</div>
 
       <div class="page" id="work">
         <p>my research can be found at my
@@ -236,7 +309,7 @@
   }
 
   /* ── Minecraft grid ── */
-  const TARGET_COLS    = 20;
+  const CELL_SIZE      = 96; // fixed px — never changes with window size
   const HOLD_DURATION  = 200;
   const REGEN_DELAY    = 300;
   const PARTICLE_COLORS = ['#888','#777','#666','#999','#555','#aaa','#444'];
@@ -246,6 +319,11 @@
   let gridCols = 0;
   const holding = {};
   const regenTimers = {};
+
+  // Conway mode state (shared so pattern spawning can write into it)
+  let conwayActive = false;
+  let conwayState  = null;
+  let conwayRows   = 0;
 
   function isBehindText(cell) {
     const wrapper = document.querySelector('.wrapper');
@@ -259,8 +337,8 @@
   function buildGrid() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    cellSize = Math.floor(vw / TARGET_COLS);
-    const cols = Math.floor(vw / cellSize);
+    cellSize = CELL_SIZE;
+    const cols = Math.ceil(vw / cellSize) + 1;
     gridCols = cols;
     const rows = Math.ceil(vh / cellSize) + 1;
 
@@ -270,7 +348,7 @@
     Object.keys(holding).forEach(i => cancelHold(parseInt(i)));
     Object.values(regenTimers).forEach(clearTimeout);
 
-    grid.style.width  = vw + 'px';
+    grid.style.width  = (cols * cellSize) + 'px';
     grid.style.height = (rows * cellSize) + 'px';
     grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
     grid.style.gridTemplateRows    = `repeat(${rows}, ${cellSize}px)`;
@@ -307,6 +385,7 @@
   }
 
   function startHold(i, cell) {
+    if (conwayActive) { spawnConwayPattern(i); return; }
     if (holding[i]) return;
     if (regenTimers[i]) {
       clearTimeout(regenTimers[i]);
@@ -539,8 +618,109 @@
       waveTimeouts.push(t1, t2, t3);
     });
 
-    const t4 = setTimeout(scheduleMole, maxDelay + HOLD_MS + FADE_MS + 400);
+    const t4 = setTimeout(() => {
+      const scheduleNext = typeOneLine();
+      if (scheduleNext) scheduleMole();
+    }, maxDelay + HOLD_MS + FADE_MS + 400);
     waveTimeouts.push(t4);
+  }
+
+  /* ── Catch sequence ── */
+  const CATCH_WORDS   = ['one.', ' two.', ' three.', ' almost there...', ' one more...', ' masterful!'];
+  const aboutOrigHTML = document.getElementById('about').innerHTML;
+  let catchCount  = 0;
+  let catchPara   = null; // the shared <p> all words are typed into
+
+  // Returns true if the mole should be re-scheduled after this catch
+  function typeOneLine() {
+    const wordIdx = catchCount;
+    catchCount++;
+
+    const word = CATCH_WORDS[wordIdx];
+    const isFinal = catchCount >= CATCH_WORDS.length;
+
+    if (wordIdx === 0) {
+      // first catch: create the paragraph
+      const about = document.getElementById('about');
+      about.appendChild(document.createElement('br'));
+      catchPara = document.createElement('p');
+      about.appendChild(catchPara);
+    }
+
+    // type the word character by character
+    let i = 0;
+    const iv = setInterval(() => {
+      catchPara.textContent += word[i++];
+      if (i >= word.length) {
+        clearInterval(iv);
+        if (isFinal) setTimeout(finaleWipe, 2000);
+      }
+    }, 80);
+
+    return !isFinal; // schedule mole only if not the last catch
+  }
+
+  function finaleWipe() {
+    // hide any active mole
+    clearInterval(moleInterval);
+    clearTimeout(moleTimer);
+    moleWrap.style.height        = '0px';
+    moleWrap.style.pointerEvents = 'none';
+    moleVisible = false;
+
+    waveTimeouts.forEach(clearTimeout);
+    waveTimeouts = [];
+
+    const CELL_MS = 30;
+    const HOLD_MS = 80;
+    const FADE_MS = 700;
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    let maxDelay = 0;
+
+    cells.forEach((cell, idx) => {
+      const rect   = cell.getBoundingClientRect();
+      const cellCx = rect.left + rect.width  / 2;
+      const cellCy = rect.top  + rect.height / 2;
+      const dist   = Math.sqrt((cellCx - cx) ** 2 + (cellCy - cy) ** 2) / cellSize;
+      const delay  = Math.round(dist * CELL_MS);
+      if (delay > maxDelay) maxDelay = delay;
+
+      const gray  = Math.min(20 + Math.round(dist * 16), 220);
+      const color = `rgb(${gray},${gray},${gray})`;
+
+      const t1 = setTimeout(() => {
+        cell.style.transition = 'background 0.04s';
+        cell.style.background = color;
+      }, delay);
+
+      const t2 = setTimeout(() => {
+        cell.style.transition = `background ${FADE_MS}ms ease-out`;
+        cell.style.background = '#000';
+      }, delay + HOLD_MS);
+
+      const t3 = setTimeout(() => {
+        cell.classList.remove('broken', 'regen', 'breaking');
+        cell.style.transition = '';
+        cell.style.background = '#000'; // stay black
+        setRing(cell, 0);
+        if (regenTimers[idx]) { clearTimeout(regenTimers[idx]); delete regenTimers[idx]; }
+      }, delay + HOLD_MS + FADE_MS + 50);
+
+      waveTimeouts.push(t1, t2, t3);
+    });
+
+    // after wipe: hide site text, reveal quote, then start Conway
+    const tFinal = setTimeout(() => {
+      document.getElementById('site').style.opacity = '0';
+      const overlay = document.getElementById('quote-overlay');
+      overlay.style.display = 'block';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+      }));
+      setTimeout(startConwayLife, 1200);
+    }, maxDelay + HOLD_MS + FADE_MS + 400);
+    waveTimeouts.push(tFinal);
   }
 
   function brokenCells() {
@@ -633,6 +813,215 @@
       }
     }, STEP_MS);
   }
+
+  /* ── Conway's Game of Life ── */
+  let conwayInterval = null;
+
+  // ── Clickable patterns (offsets from center cell) ──────────────────────
+  const CONWAY_PATTERNS = {
+    glider: {
+      name: 'Glider',
+      cells: [[0,-1],[1,0],[-1,1],[0,1],[1,1]]
+    },
+    lwss: {
+      name: 'Spaceship',
+      // raw LWSS: [0,0],[3,0],[4,1],[0,2],[4,2],[1,3],[2,3],[3,3],[4,3], centered at (2,1)
+      cells: [[-2,-1],[1,-1],[2,0],[-2,1],[2,1],[-1,2],[0,2],[1,2],[2,2]]
+    },
+    pulsar: {
+      name: 'Pulsar',
+      cells: [
+        [-4,-6],[-3,-6],[-2,-6],[2,-6],[3,-6],[4,-6],
+        [-6,-4],[-1,-4],[1,-4],[6,-4],
+        [-6,-3],[-1,-3],[1,-3],[6,-3],
+        [-6,-2],[-1,-2],[1,-2],[6,-2],
+        [-4,-1],[-3,-1],[-2,-1],[2,-1],[3,-1],[4,-1],
+        [-4,1],[-3,1],[-2,1],[2,1],[3,1],[4,1],
+        [-6,2],[-1,2],[1,2],[6,2],
+        [-6,3],[-1,3],[1,3],[6,3],
+        [-6,4],[-1,4],[1,4],[6,4],
+        [-4,6],[-3,6],[-2,6],[2,6],[3,6],[4,6]
+      ]
+    },
+    gun: {
+      name: 'Glider Gun',
+      // Gosper glider gun, centered (~col 18, row 4 is its center of mass)
+      cells: (function(){
+        const raw = [
+          [24,0],[22,1],[24,1],[12,2],[13,2],[20,2],[21,2],[34,2],[35,2],
+          [11,3],[15,3],[20,3],[21,3],[34,3],[35,3],
+          [0,4],[1,4],[10,4],[16,4],[20,4],[21,4],
+          [0,5],[1,5],[10,5],[14,5],[16,5],[17,5],[22,5],[24,5],
+          [10,6],[16,6],[24,6],[11,7],[15,7],[12,8],[13,8]
+        ];
+        const ox = 18, oy = 4;
+        return raw.map(([c,r]) => [c - ox, r - oy]);
+      })()
+    },
+    acorn: {
+      name: 'Acorn',
+      cells: [[-3,0],[-2,0],[-2,-2],[0,-1],[1,0],[2,0],[3,0]]
+    }
+  };
+
+  const PATTERN_KEYS = Object.keys(CONWAY_PATTERNS);
+
+  function spawnConwayPattern(cellIdx) {
+    if (!conwayState) return;
+    const cols = gridCols;
+    const col  = cellIdx % cols;
+    const row  = Math.floor(cellIdx / cols);
+    const key  = PATTERN_KEYS[Math.floor(Math.random() * PATTERN_KEYS.length)];
+    const pat  = CONWAY_PATTERNS[key];
+    pat.cells.forEach(([dc, dr]) => {
+      const c = col + dc, r = row + dr;
+      if (c >= 0 && c < cols && r >= 0 && r < conwayRows)
+        conwayState[r * cols + c] = 1;
+    });
+    // immediately render the new cells
+    conwayState.forEach((val, idx) => {
+      const cell = cells[idx];
+      if (!cell) return;
+      cell.style.background = val ? '#e8e8e8' : '#000';
+    });
+  }
+
+  function startConwayLife() {
+    const cols = gridCols;
+    const rows = Math.ceil(cells.length / cols);
+    conwayRows  = rows;
+    conwayActive = true;
+
+    const alive = new Uint8Array(cols * rows);
+
+    function seed(anchorCol, anchorRow, pattern) {
+      pattern.forEach(([dc, dr]) => {
+        const c = anchorCol + dc, r = anchorRow + dr;
+        if (c >= 0 && c < cols && r >= 0 && r < rows)
+          alive[r * cols + c] = 1;
+      });
+    }
+
+    const rPento  = [[1,0],[2,0],[0,1],[1,1],[1,2]];
+    const acorn   = [[0,0],[1,0],[1,2],[3,1],[4,0],[5,0],[6,0]];
+    const glider  = [[1,0],[2,1],[0,2],[1,2],[2,2]];
+    const diehard = [[6,0],[0,1],[1,1],[1,2],[5,2],[6,2],[7,2]];
+
+    const midC = Math.floor(cols / 2);
+    const midR = Math.floor(rows / 2);
+
+    seed(midC - 2,                      midR - 4,                      rPento);
+    seed(midC + 6,                      midR + 1,                      acorn);
+    seed(Math.floor(cols * 0.15) + 1,   Math.floor(rows * 0.2)  - 1,  glider);
+    seed(Math.floor(cols * 0.7)  + 1,   Math.floor(rows * 0.7)  - 1,  glider.map(([c,r]) => [c, -r + 4]));
+    seed(Math.floor(cols * 0.25) + 1,   Math.floor(rows * 0.65) - 1,  rPento);
+    seed(Math.floor(cols * 0.65) + 1,   Math.floor(rows * 0.2)  - 1,  diehard);
+    seed(midC - 7,                      midR + 5,                      acorn.map(([c,r]) => [-c + 6, r]));
+
+    conwayState = alive;
+
+    // Show veil (opaque black), then fade it out so cells emerge from darkness
+    const veil = document.getElementById('conway-veil');
+    veil.style.display  = 'block';
+    veil.style.opacity  = '1';
+    veil.style.transition = 'none';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      veil.style.transition = 'opacity 1.6s ease';
+      veil.style.opacity    = '0';
+    }));
+
+    function applyToGrid() {
+      conwayState.forEach((val, idx) => {
+        const cell = cells[idx];
+        if (!cell) return;
+        cell.style.transition = 'background 0.15s ease';
+        cell.style.background = val ? '#e8e8e8' : '#000';
+      });
+    }
+
+    function step() {
+      const next = new Uint8Array(conwayState.length);
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          let n = 0;
+          for (let dr = -1; dr <= 1; dr++) {
+            for (let dc = -1; dc <= 1; dc++) {
+              if (dr === 0 && dc === 0) continue;
+              const nr = r + dr, nc = c + dc;
+              if (nr >= 0 && nr < rows && nc >= 0 && nc < cols)
+                n += conwayState[nr * cols + nc];
+            }
+          }
+          const cur = conwayState[r * cols + c];
+          next[r * cols + c] = (cur && (n === 2 || n === 3)) || (!cur && n === 3) ? 1 : 0;
+        }
+      }
+      conwayState = next;
+    }
+
+    applyToGrid();
+
+    conwayInterval = setInterval(() => {
+      step();
+      applyToGrid();
+    }, 70);
+
+    // After 3.5 s show the back button — but keep simulation running
+    setTimeout(showBackButton, 3500);
+  }
+
+  function showBackButton() {
+    const btn = document.getElementById('back-btn');
+    btn.style.display = 'flex';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      btn.style.opacity = '1';
+    }));
+  }
+
+  function resetAll() {
+    if (conwayInterval) { clearInterval(conwayInterval); conwayInterval = null; }
+    conwayActive = false;
+    conwayState  = null;
+    waveTimeouts.forEach(clearTimeout);
+    waveTimeouts = [];
+
+    const veil = document.getElementById('conway-veil');
+    veil.style.opacity = '0';
+    veil.style.display = 'none';
+
+    const btn = document.getElementById('back-btn');
+    btn.style.opacity = '0';
+    btn.style.display = 'none';
+
+    const overlay = document.getElementById('quote-overlay');
+    overlay.style.opacity = '0';
+    overlay.style.display = 'none';
+
+    document.getElementById('site').style.opacity = '1';
+
+    cells.forEach((cell, idx) => {
+      cell.classList.remove('broken', 'regen', 'breaking');
+      cell.style.transition = '';
+      cell.style.background = '';
+      setRing(cell, 0);
+      if (regenTimers[idx]) { clearTimeout(regenTimers[idx]); delete regenTimers[idx]; }
+    });
+
+    document.getElementById('about').innerHTML = aboutOrigHTML;
+    catchCount  = 0;
+    catchPara   = null;
+
+    clearInterval(moleInterval);
+    clearTimeout(moleTimer);
+    moleWrap.style.height        = '0px';
+    moleWrap.style.pointerEvents = 'none';
+    moleVisible  = false;
+    molePeekCell = null;
+
+    scheduleMole();
+  }
+
+  document.getElementById('back-btn').addEventListener('click', resetAll);
 
   scheduleMole();
 </script>
