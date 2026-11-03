@@ -43,6 +43,10 @@
     cursor: crosshair;
   }
 
+  /* breaking disabled: no crosshair or hover tint */
+  #mc-grid.disabled .cell       { cursor: default; }
+  #mc-grid.disabled .cell:hover { background: none; }
+
   .cell .pr-wrap {
     position: absolute;
     inset: 0;
@@ -182,6 +186,16 @@
   .contact-wrap.closing .contact-dropdown a:nth-child(1) { transition-delay: 0.21s; }
 
   .content { width: 500px; }
+  .content ul { margin: 0 0 1em; padding-left: 20px; }
+  .content li { margin-bottom: 8px; }
+  /* work page: title, venue line, muted keyword line */
+  .content .section-label { color: #888; }
+  .content ul.entries     { list-style: none; padding-left: 0; }
+  .content ul.entries li  { margin-bottom: 16px; }
+  .content .venue    { margin-top: 2px; }
+  .content .keywords { margin-top: 2px; color: #888; font-size: 14px; font-style: italic; }
+  /* placeholder for details still to fill in */
+  .content .todo { color: #c33; font-size: 13px; }
   .page { display: none; }
   .page.active { display: block; }
   .content a { color: black; text-decoration: none; }
@@ -271,7 +285,7 @@
         <div class="contact-dropdown">
           <a href="https://linkedin.com/in/thantham" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://instagram.com/aj.cmd" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a>
           <a href="mailto:thantham61@gmail.com" target="_blank">Email</a>
         </div>
       </div>
@@ -281,21 +295,70 @@
       <div class="page active" id="about">
   <p>don't be afraid to break things</p>
   <br>
-  <p>I'm interested in any kind of research, especially machine intelligence and interpretability. I'm working on <a class="ref" href="https://mantis.csail.mit.edu/" target="_blank" rel="noopener">Mantis</a>, a cognitive cartography platform by the Kellis Lab at MIT CSAIL.</p>
+  <p>my name is AJ. i'm a freshman at cornell university studying electrical and computer engineering.</p>
   <br>
-  <p>Previously, I skipped two years of high school, spending one of which conducting research on solar cells. I also spent a summer at Wolfram and Euler Circle learning about <a class="ref" href="https://community.wolfram.com/groups/-/m/t/3503509" target="_blank" rel="noopener">cellular automata</a> and <a class="ref" href="https://www.researchgate.net/publication/396479001" target="_blank" rel="noopener">differential geometry</a>.</p>
+  <p>i'm interested in any kind of research, especially machine intelligence and interpretability. i'm part of <a class="ref" href="https://www.cornell-aia.org/" target="_blank" rel="noopener">cornell ai alignment</a> and <a class="ref" href="https://www.eacornell.org/" target="_blank" rel="noopener">cornell effective altruism</a>.</p>
   <br>
-  <p>I grew up in Thailand and lived in a military camp. My time was spent chasing whatever I find interesting. I competed in olympiads, enjoyed science fairs, stumbled into research, then taught myself mental chess and blindfolded piano! I LOVE Minecraft and gummy bears. I'm currently learning how to shuffle cards in cool ways and wonder if a robot can do it...</p>
+  <p>some of what i've done:</p>
+  <ul>
+    <li>building a stealth spatial ai startup for robotics at <a class="ref" href="https://f.inc/" target="_blank" rel="noopener">founders, inc.</a></li>
+    <li>worked on <a class="ref" href="https://mantis.csail.mit.edu/" target="_blank" rel="noopener">mantis</a> with the kellis lab at mit.</li>
+    <li>took a year off high school to work on perovskite solar cells at mahidol university. some of it became <a class="ref" href="#publications" onclick="show('work', 'publications'); return false;">papers</a>.</li>
+    <li>interned at thailand's national cybersecurity agency after 8th grade.</li>
+    <li>spent summers doing math at wolfram, euler circle, and mit primes.</li>
+  </ul>
+  <p>the rest is on my <a class="ref" href="#work" onclick="show('work'); return false;">work</a> page.</p>
   <br>
-  <p>I love fundamental questions and the endless forms they come in. I think it's comforting knowing that the mind is capable of so much more than itself.</p>
+  <p>i love fundamental questions and the endless forms they come in. i think it's comforting knowing that the mind is capable of so much more than itself.</p>
   <br>
 </div>
 
       <div class="page" id="work">
-        <p>my research can be found at my
-        <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a></p>
-        <p>and my code is on
-        <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a></p>
+        <p class="section-label">affiliations</p>
+        <ul class="entries">
+          <li>
+            <div><a class="ref" href="https://mantis.csail.mit.edu/" target="_blank" rel="noopener">mantis</a>, kellis lab, mit (2026)</div>
+            <div class="venue">mantis rising ai scholar on a cognitive cartography platform.</div>
+          </li>
+          <li>
+            <div>perovskite solar cells, kanjanaboos lab, mahidol university (2024–25)</div>
+            <div class="keywords">device fabrication, afm, sem, photoluminescence, radiative cooling</div>
+          </li>
+          <li>
+            <div>smart lens lab, chulalongkorn university (2023–24)</div>
+            <div class="keywords">electromagnetic braille display, antimicrobial nanoparticle gels</div>
+          </li>
+        </ul>
+        <br>
+        <p class="section-label" id="publications">research</p>
+        <ul class="entries">
+          <li>
+            <div><a class="ref" href="https://doi.org/10.1002/aenm.202403088" target="_blank" rel="noopener">comprehensive review on slot-die-based perovskite photovoltaics</a></div>
+            <div class="venue">advanced energy materials, 2024. frontispiece article.</div>
+            <div class="keywords">halide perovskites, slot-die coating, scalable photovoltaics</div>
+          </li>
+          <li>
+            <div><a class="ref" href="https://doi.org/10.1002/smsc.70311" target="_blank" rel="noopener">enhancing the transparency–temperature trade-off through spectral engineering and radiative cooling</a></div>
+            <div class="venue">small science, 2026.</div>
+            <div class="keywords">spectral engineering, optical transparency, passive radiative cooling</div>
+          </li>
+          <li>
+            <div><a class="ref" href="https://community.wolfram.com/t/wsrp25-on-the-density-and-multiway-spectral-theory-of-aggregation-systems/25762" target="_blank" rel="noopener">on the density and multiway spectral theory of aggregation systems</a></div>
+            <div class="venue">computational essay, wolfram summer research program, 2025. staff pick; presented at the program meeting.</div>
+            <div class="keywords">aggregation systems, cellular automata, density, multiway graphs, spectral graph theory</div>
+          </li>
+          <li>
+            <div><a class="ref" href="https://www.researchgate.net/publication/396479001_Group_Actions_and_Mobius_Symmetries_in_Hyperbolic_Tessellations" target="_blank" rel="noopener">group actions and möbius symmetries in hyperbolic tessellations</a></div>
+            <div class="venue">expository paper, euler circle, 2025.</div>
+            <div class="keywords">group actions, möbius transformations, hyperbolic plane, tessellations</div>
+          </li>
+          <li>
+            <div><a class="ref" href="https://artofproblemsolving.com/polymath/mitprimes2025/p" target="_blank" rel="noopener">the strong goldbach property in additively reduced semidomains</a></div>
+            <div class="venue">mit primes crowdmath, 2025.</div>
+            <div class="keywords">semidomains, factorization theory, goldbach property, commutative algebra</div>
+          </li>
+        </ul>
+        <br>
       </div>
     </div>
   </div>
@@ -303,13 +366,15 @@
 
 <script>
   /* ── Nav ── */
-  function show(page) {
+  function show(page, anchor) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(page).classList.add('active');
+    if (anchor) document.getElementById(anchor).scrollIntoView();
   }
 
   /* ── Minecraft grid ── */
-  const CELL_SIZE      = 96; // fixed px — never changes with window size
+  const BREAKING_ENABLED = false; // set true to re-enable breaking, the mole and the Conway page
+  const CELL_SIZE     = 96; // fixed px — never changes with window size
   const HOLD_DURATION  = 200;
   const REGEN_DELAY    = 300;
   const PARTICLE_COLORS = ['#888','#777','#666','#999','#555','#aaa','#444'];
@@ -343,6 +408,7 @@
     const rows = Math.ceil(vh / cellSize) + 1;
 
     const grid = document.getElementById('mc-grid');
+    grid.classList.toggle('disabled', !BREAKING_ENABLED);
     grid.innerHTML = '';
     cells = [];
     Object.keys(holding).forEach(i => cancelHold(parseInt(i)));
@@ -385,6 +451,7 @@
   }
 
   function startHold(i, cell) {
+    if (!BREAKING_ENABLED) return;
     if (conwayActive) { spawnConwayPattern(i); return; }
     if (holding[i]) return;
     if (regenTimers[i]) {
@@ -1023,7 +1090,7 @@
 
   document.getElementById('back-btn').addEventListener('click', resetAll);
 
-  scheduleMole();
+  if (BREAKING_ENABLED) scheduleMole();
 </script>
 </body>
 </html>
