@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Love | Thantham (AJ) Jittham</title>
+  <script src="../assets/nav-transition.js"></script>
+  <meta name="description" content="A mathematical framework for relational tile dynamics.">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/site.css">
+  <link rel="stylesheet" href="love.css">
+  <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] }, chtml: { scale: 0.94 } };</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body class="love">
+
+<div id="mc-grid"></div>
+<div id="mole-wrap"><canvas id="mole-canvas"></canvas></div>
+<div id="conway-veil"></div>
+<div id="back-btn">&#8592; Back</div>
+<div id="quote-overlay">
+  <p class="quote-text">"You don't educate people by telling them useful things; you educate people by telling them interesting things"</p>
+  <p class="quote-attr">— John Conway</p>
+</div>
+
+<div id="site">
+  <div class="wrapper">
+    <nav>
+      <a href="../">About</a>
+      <a href="./">Love</a>
+      <a href="../research/">Research</a>
+      <div class="contact-wrap">
+        <div class="contact-label">Contact <span class="contact-arrow">›</span></div>
+        <div class="contact-dropdown">
+          <a href="https://linkedin.com/in/thantham" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a>
+          <a href="mailto:thantham61@gmail.com" target="_blank">Email</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="page active" id="love">
+        <div class="love-layout">
+          <div class="love-stage" aria-hidden="true"><canvas></canvas></div>
+          <div class="love-text">
+
+            <section class="slide hero" data-scene="0">
+              <h1>A Mathematical Framework for Relational Tile Dynamics</h1>
+              <p class="byline small">from a place within the heart</p>
+              <p class="love-note">this is based on a <a class="ref" href="relational-tile-dynamics.pdf" target="_blank" rel="noopener">presentation</a> i made for a friend after his breakup. i apologize in advance for the quality of the work: it was made in a night, with someone crying right next to me! haha</p>
+            </section>
+
+            <section class="slide" data-scene="1">
+              <h2>Motivation</h2>
+              <ul>
+                <li>Human beings are modelled as <b>tileable regions</b> encoding capacities, values, needs, and fulfillment.</li>
+                <li>Missing aspects of self correspond to <b>holes</b> in these tilings.</li>
+                <li>Relationships create <b>transformations</b> that fill, move, or reshape these holes.</li>
+                <li>We seek a clean mathematical language for:
+                  <ul>
+                    <li>individuals as structured sets,</li>
+                    <li>missing pieces as holes,</li>
+                    <li>relationships as dynamical tile-exchange processes,</li>
+                    <li>memory and anticipation as operators acting on time,</li>
+                    <li>global external influences and individual effort.</li>
+                  </ul>
+                </li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="2">
+              <h2>Individuals as Tileable Regions</h2>
+              <p>Let each person be represented by a region</p>
+              <div class="eq">\[ A \subseteq \mathbb{R}^n \]</div>
+              <p>together with a tiling</p>
+              <div class="eq">\[ \mathcal{T}_A = \{T_{A,i}\}_{i \in I_A} \]</div>
+              <p>such that</p>
+              <div class="eq">\[ A = \bigcup_{i \in I_A} T_{A,i}, \qquad \operatorname{int}(T_{A,i}) \cap \operatorname{int}(T_{A,j}) = \varnothing. \]</div>
+              <p>Interpretation:</p>
+              <ul>
+                <li>Tiles represent relatively stable “fulfilled aspects” of the person.</li>
+                <li>Boundaries encode tensions, limits, or openness to change.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="3">
+              <h2>Missing Aspects as Holes</h2>
+              <p>A <b>missing piece</b> (unmet need, unresolved history, unrealized facet) is encoded as a hole</p>
+              <div class="eq">\[ \alpha_A \subseteq A \]</div>
+              <p>which is not covered by any tile:</p>
+              <div class="eq">\[ \mathcal{T}_A^{(-\alpha)} := \mathcal{T}_A \setminus \{\alpha_A\}. \]</div>
+              <p>The “incomplete person-state” is the pair</p>
+              <div class="eq">\[ (A,\ \mathcal{T}_A^{(-\alpha)}). \]</div>
+              <p>Holes may be:</p>
+              <ul>
+                <li>structural (long-term patterns),</li>
+                <li>situational (context-dependent),</li>
+                <li>relational (defined relative to particular others).</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="4">
+              <h2>Relational Transformations</h2>
+              <p>A relationship between \(A\) and \(B\) induces transformations</p>
+              <div class="eq">\[ f_i : \mathcal{T}_A^{(-\alpha)} \times \mathcal{T}_B^{(-\beta)} \longrightarrow \mathcal{T}_A^{(-\alpha_i)} \times \mathcal{T}_B^{(-\beta_i)}. \]</div>
+              <p>Interpretation:</p>
+              <ul>
+                <li>\(f_i\) fills or reshapes one missing aspect while possibly exposing another.</li>
+                <li>Both individuals may be changed, asymmetrically or symmetrically.</li>
+                <li>\(f_i\) may encode conversation, conflict, care, rupture, repair, etc.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="5">
+              <h2>Temporal Structure: Periods of Interaction</h2>
+              <p>Each relational event has a temporal support:</p>
+              <div class="eq">\[ P_i = [t_i^-, t_i^+] \subset \mathbb{R}. \]</div>
+              <p>A sequence of relational events is</p>
+              <div class="eq">\[ (f_1, P_1),\ (f_2, P_2),\ \ldots,\ (f_k, P_k). \]</div>
+              <p>We can define a cumulative relational dynamic</p>
+              <div class="eq">\[ \mathcal{F}_{A,B}(t) = f_k \circ f_{k-1} \circ \cdots \circ f_1, \]</div>
+              <p>where \(k\) is such that \(t \in P_k\) or \(t\) lies after the \(k\)-th interaction.</p>
+              <ul>
+                <li>At each stage, new holes appear or old ones are resolved.</li>
+                <li>The interior tilings of \(A\) and \(B\) evolve as a dynamical system.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="6">
+              <h2>Global Interaction Field: A’s Life with Everything</h2>
+              <p>Beyond any specific relationship, each person \(A\) interacts with many people and situations. Let \(x_A(t)\) denote the <b>state</b> of \(A\) in some configuration space (emotional, cognitive, relational).</p>
+              <div class="eq">\[ x_A(t) \in \mathcal{X}. \]</div>
+              <p>Let \(\mathcal{F}_A\) be the set of external influences (pulls) on \(A\):</p>
+              <div class="eq">\[ \mathcal{F}_A = \{f_{A,1}, f_{A,2}, f_{A,3}, \ldots\}. \]</div>
+              <p>Then schematically, the net external pull is</p>
+              <div class="eq">\[ \frac{dx_A}{dt}(t) \approx \sum_{f \in \mathcal{F}_A} f(t), \]</div>
+              <p>where each \(f\) encodes the effect of some person, place, event, or environment on \(A\).</p>
+            </section>
+
+            <section class="slide" data-scene="7">
+              <h2>Specific Path: The A–B Relationship Inside the Field</h2>
+              <p>For a given relationship between \(A\) and \(B\), we distinguish:</p>
+              <ul>
+                <li>a <b>relationship-specific pull</b> \(f_{A,B}(t)\) on \(A\) due to \(B\),</li>
+                <li>the residual set of pulls \(\mathcal{F}_A \setminus \{f_{A,B}\}\) from everything else.</li>
+              </ul>
+              <p>Then we can decompose:</p>
+              <div class="eq">\[ \frac{dx_A}{dt}(t) = f_{A,B}(t) + \sum_{f \in \mathcal{F}_A \setminus \{f_{A,B}\}} f(t), \]</div>
+              <p>and similarly for \(B\):</p>
+              <div class="eq">\[ \frac{dx_B}{dt}(t) = f_{B,A}(t) + \sum_{g \in \mathcal{F}_B \setminus \{f_{B,A}\}} g(t). \]</div>
+              <p>The <b>global path</b> of \(A\) or \(B\) is therefore different from the hypothetical path where only the \(A\)–\(B\) relationship exists.</p>
+            </section>
+
+            <section class="slide" data-scene="8">
+              <h2>Memory Operators: Retrospective vs Prospective</h2>
+              <p>Each person \(A\) carries an internal <b>evaluation system</b> decomposed into:</p>
+              <div class="eq">\[ C_A = \left( C_A^{\mathrm{ret}},\ C_A^{\mathrm{pro}} \right). \]</div>
+              <ul>
+                <li><b>Retrospective evaluation</b> (looking back):
+                  <div class="eq">\[ C_A^{\mathrm{ret}} : \mathcal{P}_{\mathrm{past}} \longrightarrow \mathcal{M}_A, \]</div>
+                  where \(\mathcal{P}_{\mathrm{past}}\) is the set of past time-intervals and \(\mathcal{M}_A\) is the space of internal “memory states” of \(A\).</li>
+                <li><b>Prospective projection</b> (looking forward):
+                  <div class="eq">\[ C_A^{\mathrm{pro}} : B \times \mathcal{P}_{\mathrm{future}} \longrightarrow \mathcal{M}_A^{\mathrm{pred}}, \]</div>
+                  encoding how \(A\) projects possible futures with \(B\) on a future interval.</li>
+              </ul>
+              <p>Retrospective evaluations are based on a <em>completed</em> trajectory; prospective projections are based on <em>partial information</em> and are inherently uncertain.</p>
+            </section>
+
+            <section class="slide" data-scene="9">
+              <h2>Retrospective Evaluation: Complete Trajectories</h2>
+              <p>For a past interaction period \(P \subset (0, t)\), the relational dynamics</p>
+              <div class="eq">\[ \{f_i\}_{i :\, P_i \subseteq P} \]</div>
+              <p>and resulting tilings are fully determined. Then</p>
+              <div class="eq">\[ C_A^{\mathrm{ret}}(P) \]</div>
+              <p>is a (deterministic) function of the realized history on \(P\):</p>
+              <div class="eq">\[ C_A^{\mathrm{ret}}(P) = \Phi_A\big( \{(f_i, P_i) : P_i \subseteq P\},\ (A, \mathcal{T}_A),\ (B, \mathcal{T}_B) \big), \]</div>
+              <p>for some evaluation functional \(\Phi_A\).</p>
+              <ul>
+                <li>This captures how \(A\) remembers, summarizes, or re-narrates a completed episode.</li>
+                <li>No stochasticity is needed once the underlying trajectory is fixed.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="10">
+              <h2>Perception of B and Coverage Fraction</h2>
+              <p>\(A\) does not directly access the full internal tiling of \(B\):</p>
+              <div class="eq">\[ (B, \mathcal{T}_B). \]</div>
+              <p>Instead, \(A\) has a perceived representation</p>
+              <div class="eq">\[ \widehat{B}_A = \Pi_A(B, \mathcal{T}_B), \]</div>
+              <p>where \(\Pi_A\) is a projection/observation map (filters, blind spots, ideals, etc.).</p>
+              <p>We define a <b>coverage fraction</b></p>
+              <div class="eq">\[ \kappa_A(B) \in (0, 1] \]</div>
+              <p>measuring how much of \(B\)’s interior \(A\) has effectively encountered:</p>
+              <div class="eq">\[ \kappa_A(B) \approx \frac{\text{number of tiles of } B \text{ that } A \text{ has interacted with}}{\text{effective total number of tiles of } B}. \]</div>
+              <ul>
+                <li>\(\kappa_A(B)\) is high if \(A\) has seen \(B\) in many contexts.</li>
+                <li>Low \(\kappa_A(B)\) means \(A\) is predicting from a very partial picture.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="11">
+              <h2>History-Dependent Information: \(H_{A,B}\)</h2>
+              <p>Let \(H_{A,B}(t)\) be the relational history up to time \(t\):</p>
+              <div class="eq">\[ H_{A,B}(t) := \{ (f_i, P_i) : P_i \subset (-\infty, t],\ A \text{ and } B \text{ both involved} \}. \]</div>
+              <p>Together with the coverage fraction \(\kappa_A(B)\), this describes what \(A\) has to work with when making predictions:</p>
+              <div class="eq">\[ I_A(B, t) := \big( H_{A,B}(t),\ \kappa_A(B) \big). \]</div>
+              <ul>
+                <li>\(I_A(B, t)\) is the <b>information state</b> of \(A\) about \(B\) at time \(t\).</li>
+                <li>Retrospective evaluations \(C_A^{\mathrm{ret}}\) are based on realized parts of \(H_{A,B}(t)\).</li>
+                <li>Prospective projections \(C_A^{\mathrm{pro}}\) use \(I_A(B, t)\) to form beliefs about future \(f_i\).</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="12">
+              <h2>Prospective Projection as a Stochastic Operator</h2>
+              <p>We now introduce a stochastic model for future interactions. Let \((\Omega, \mathcal{F}, \mathbb{P})\) be a probability space. For a future interval</p>
+              <div class="eq">\[ I \subset (t, \infty), \]</div>
+              <p>define a random future relational transformation</p>
+              <div class="eq">\[ F_I : \Omega \longrightarrow \mathcal{F}_{A,B} \]</div>
+              <p>whose distribution depends on \(I_A(B, t)\):</p>
+              <div class="eq">\[ \mathbb{P}\big( F_I \in \cdot \mid I_A(B, t) \big). \]</div>
+              <p>Let \(U_A\) be an evaluation functional that maps a future trajectory into an internal valuation (e.g., emotional payoff, stability, risk):</p>
+              <div class="eq">\[ U_A : \mathcal{F}_{A,B} \longrightarrow \mathcal{M}_A^{\mathrm{pred}}. \]</div>
+              <p>Then the prospective operator is naturally defined as a conditional expectation:</p>
+              <div class="eq">\[ C_A^{\mathrm{pro}}(B, I) := \mathbb{E}\big[ U_A(F_I) \mid I_A(B, t) \big]. \]</div>
+            </section>
+
+            <section class="slide" data-scene="13">
+              <h2>Accuracy Gap: Retrospective vs Prospective</h2>
+              <p>Retrospective and prospective evaluations differ in their information content:</p>
+              <ul>
+                <li><b>Retrospective:</b> \(C_A^{\mathrm{ret}}(P)\) is a (nearly) deterministic function of a completed history on \(P\).</li>
+                <li><b>Prospective:</b> \(C_A^{\mathrm{pro}}(B, I)\) is an expectation over unknown future transformations \(F_I\).</li>
+              </ul>
+              <p>A simple way to encode the idea that predictions are “less accurate”:</p>
+              <div class="eq">\[ \operatorname{Var}\big( C_A^{\mathrm{pro}}(B, I) \big) \propto \frac{1}{\kappa_A(B)}. \]</div>
+              <ul>
+                <li>As \(\kappa_A(B) \to 1\) (high coverage), prediction variance shrinks.</li>
+                <li>As \(\kappa_A(B) \to 0\) (little knowledge), prediction variance is large.</li>
+                <li>Retrospective evaluations correspond (in this picture) to the limit of zero variance once the path is realized.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="14">
+              <h2>Effort Toward a Relationship</h2>
+              <p>We now model the intentional <b>effort</b> each person invests in the \(A\)–\(B\) relationship.</p>
+              <ul>
+                <li>\(E_A \ge 0\): effort of \(A\) directed toward maintaining or strengthening the \(A\)–\(B\) path.</li>
+                <li>\(E_B \ge 0\): effort of \(B\) directed toward \(A\).</li>
+              </ul>
+              <p>These are not just “forces” but resource-like quantities:</p>
+              <ul>
+                <li>time, attention, emotional labor,</li>
+                <li>willingness to change tiles / reshape holes for the other,</li>
+                <li>active resistance against dispersive influences pulling them apart.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="15">
+              <h2>Dispersive Influences from Everything Else</h2>
+              <p>Among the global influences \(\mathcal{F}_A\), we separate those that tend to pull \(A\) away from \(B\):</p>
+              <div class="eq">\[ \mathcal{F}_A^{\mathrm{away}} \subseteq \mathcal{F}_A, \qquad \mathcal{F}_B^{\mathrm{away}} \subseteq \mathcal{F}_B. \]</div>
+              <p>Define scalar <b>dispersive pressures</b></p>
+              <div class="eq">\[ D_A := \sum_{f \in \mathcal{F}_A^{\mathrm{away}}} \|f\|, \qquad D_B := \sum_{g \in \mathcal{F}_B^{\mathrm{away}}} \|g\|. \]</div>
+              <p>Interpretation:</p>
+              <ul>
+                <li>\(D_A\) is the total “pull” of everything else trying to redirect \(A\)’s trajectory away from the \(A\)–\(B\) path.</li>
+                <li>\(D_B\) is the analogous quantity for \(B\).</li>
+                <li>These may come from other people, commitments, environments, or internal conflicts.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="16">
+              <h2>A Simple Stability Inequality</h2>
+              <p>A minimal condition for the \(A\)–\(B\) relationship to be net pulled together rather than apart is:</p>
+              <div class="eq">\[ E_A + E_B \ge D_A + D_B. \]</div>
+              <p>Equivalently, with</p>
+              <div class="eq">\[ E_{AB} := E_A + E_B, \qquad D_{AB} := D_A + D_B, \]</div>
+              <p>we require</p>
+              <div class="eq">\[ E_{AB} \ge D_{AB}. \]</div>
+              <p>Interpretation:</p>
+              <ul>
+                <li>The combined effort toward the relationship outweighs the combined dispersive pressures.</li>
+                <li>If \(E_{AB} &lt; D_{AB}\), the net drift is away from a shared path, even if one side is trying hard.</li>
+                <li>This leaves room for asymmetry (e.g., \(E_A \gg E_B\)) while focusing on the joint balance of forces.</li>
+              </ul>
+            </section>
+
+            <section class="slide" data-scene="17">
+              <h2>Directional Dynamics and Noise (Sketch)</h2>
+              <p>We can focus on the component of motion along the \(A\)–\(B\) direction in state space. Let \(x_{AB}(t)\) be a scalar measuring “closeness” or alignment along the shared path. Then a stylized stochastic dynamics is</p>
+              <div class="eq">\[ dx_{AB}(t) = \big( E_A^{\parallel}(t) + E_B^{\parallel}(t) - D_A^{\parallel}(t) - D_B^{\parallel}(t) \big)\, dt + \sigma_{AB}\, dW_t, \]</div>
+              <p>where:</p>
+              <ul>
+                <li>\(E_A^{\parallel}, E_B^{\parallel}\) are the components of effort pulling along the \(A\)–\(B\) direction,</li>
+                <li>\(D_A^{\parallel}, D_B^{\parallel}\) are the components of dispersive pulls along that direction,</li>
+                <li>\(dW_t\) is Brownian noise capturing unpredictability and random shocks.</li>
+              </ul>
+              <p>In expectation, a convergence bias requires</p>
+              <div class="eq">\[ \mathbb{E}\big[ E_A^{\parallel} + E_B^{\parallel} \big] \ge \mathbb{E}\big[ D_A^{\parallel} + D_B^{\parallel} \big]. \]</div>
+            </section>
+
+            <section class="slide" data-scene="18">
+              <h2>Relational Tile Dynamics: Extended View</h2>
+              <p>A full relational system between \(A\) and \(B\) can be summarized as</p>
+              <div class="eq">\[ \mathcal{R}_{A,B} = \big( A,\ \mathcal{T}_A,\ B,\ \mathcal{T}_B,\ \{(f_i, P_i)\},\ C_A^{\mathrm{ret}},\ C_A^{\mathrm{pro}},\ C_B^{\mathrm{ret}},\ C_B^{\mathrm{pro}} \big) \]</div>
+              <div class="eq">\[ \big( \kappa_A(B),\ \kappa_B(A),\ E_A,\ E_B,\ D_A,\ D_B \big). \]</div>
+              <p>This form makes it clear how:</p>
+              <ul>
+                <li>global forces interact with intentional effort,</li>
+                <li>memory and prediction shape the \(A\)–\(B\) trajectory,</li>
+                <li>coverage fractions determine informational accuracy,</li>
+                <li>convergence or drift occurs depending on \(E_{AB}\) vs \(D_{AB}\).</li>
+              </ul>
+            </section>
+
+            <section class="slide dear" data-scene="19">
+              <h2>For you</h2>
+              <p class="dear-line">Dear you,</p>
+            </section>
+
+            <section class="slide promise" data-scene="20">
+              <h2>A Least-Action Promise</h2>
+              <p>Let \(x(t)\) be my path through the world, and let \(x_{\text{you}}\) be the point in state space that means <em>by your side</em>. For \(t \in [t_0, T]\), define the action</p>
+              <div class="eq">\[ \mathcal{A}[x] = \int_{t_0}^{T} \left( \frac{1}{2} \|\dot{x}(t)\|^2 + D(t) - E_{\text{us}}(t) + V_{\text{you}}(x(t)) \right) dt, \]</div>
+              <p>where:</p>
+              <ul>
+                <li>\(D(t)\) collects all dispersive pulls trying to pull me away,</li>
+                <li>\(E_{\text{us}}(t)\) is the effort I choose to invest in us,</li>
+                <li>\(V_{\text{you}}(x)\) is a potential well centered at \(x_{\text{you}}\).</li>
+              </ul>
+              <p><b>My promise</b> is to choose the trajectory</p>
+              <div class="eq">\[ x^*(t) = \arg\min_{x(t)} \left\{ \mathcal{A}[x] \;\middle|\; x(t_0) \text{ given},\ x(T) = x_{\text{you}} \right\}. \]</div>
+              <p class="last-line">Among all the lives I could live, I choose the path of least action that ends with me beside you.</p>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="original">
+    <h2>The original</h2>
+    <p>The presentation as i made it, that night. <a class="ref" href="relational-tile-dynamics.pdf" target="_blank" rel="noopener">Open the PDF</a>.</p>
+    <figure class="slide-viewer">
+      <img data-slide-image src="slides/slide-01.jpg" alt="Slide 1 of 21 of the original presentation.">
+      <figcaption>
+        <button type="button" data-slide-prev aria-label="Previous slide">&#8592;</button>
+        <span data-slide-count aria-live="polite">1 / 21</span>
+        <button type="button" data-slide-next aria-label="Next slide">&#8594;</button>
+      </figcaption>
+    </figure>
+  </section>
+</div>
+
+<script src="../assets/site.js"></script>
+<script src="love.js"></script>
+</body>
+</html>

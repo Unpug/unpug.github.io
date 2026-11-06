@@ -7,7 +7,6 @@
   /* ── Complex arithmetic: numbers are [re, im] ── */
   function mul(a, b) { return [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]]; }
   function conj(a) { return [a[0], -a[1]]; }
-  function add(a, b) { return [a[0] + b[0], a[1] + b[1]]; }
   function sub(a, b) { return [a[0] - b[0], a[1] - b[1]]; }
   function div(a, b) {
     var d = b[0] * b[0] + b[1] * b[1];
@@ -88,7 +87,7 @@
     new IntersectionObserver(function (entries) { onChange(entries[0].isIntersecting); }).observe(el);
   }
 
-  /* ── Figure 1: {p, q} tiling you can drag with a Möbius isometry ── */
+  /* ── Page header: a {7, 3} tiling, drifting on its own ── */
   function tilingFigure(root) {
     var canvas = root.querySelector('canvas');
     var fallback = root.querySelector('img');
@@ -111,27 +110,20 @@
         '}'
       ].join('\n'));
     } catch (e) { view = null; }
-    if (!view) { canvas.style.display = 'none'; root.querySelector('.viz-controls').style.display = 'none'; return; }
+    if (!view) { canvas.style.display = 'none'; return; }
     fallback.style.display = 'none';
 
-    var p = 7, q = 3, alpha = [1, 0], beta = [0, 0], valid = true;
-    var idle = !reduceMotion, onScreen = false, t = 0, frame = null;
-    var status = root.querySelector('[data-status]');
-    var pLabel = root.querySelector('[data-p]'), qLabel = root.querySelector('[data-q]');
+    var p = 7, q = 3, alpha = [1, 0], beta = [0, 0];
+    var onScreen = false, t = 0, frame = null;
 
     function translation(a) {
       var s = 1 / Math.sqrt(1 - abs2(a));
       return [[s, 0], [a[0] * s, a[1] * s]];
     }
-    function compose(m1, m2) {
-      return [add(mul(m1[0], m2[0]), mul(m1[1], conj(m2[1]))), add(mul(m1[0], m2[1]), mul(m1[1], conj(m2[0])))];
-    }
-    function gcd(a, b) { return b ? gcd(b, a % b) : a; }
 
     function render() {
       view.resize();
       var gl = view.gl;
-      if (!valid) { gl.clearColor(1, 1, 1, 1); gl.clear(gl.COLOR_BUFFER_BIT); return; }
       var sp = Math.sin(Math.PI / p), cq = Math.cos(Math.PI / q);
       var r = Math.sqrt(sp * sp / (cq * cq - sp * sp));
       gl.uniform1f(view.u('uR'), r);
@@ -141,59 +133,10 @@
       view.draw();
     }
 
-    function update() {
-      pLabel.textContent = p;
-      qLabel.textContent = q;
-      var num = p + q, den = p * q, g = gcd(num, den);
-      var sum = '1/' + p + ' + 1/' + q + ' = ' + (num / g) + '/' + (den / g);
-      valid = 2 * num < den;
-      if (valid) status.textContent = sum + ' < 1/2, so this tiling exists in the hyperbolic plane.';
-      else if (2 * num === den) status.textContent = sum + ' = 1/2. This one tiles the flat Euclidean plane, not the hyperbolic plane.';
-      else status.textContent = sum + ' > 1/2. This one tiles the sphere, not the hyperbolic plane.';
-      canvas.classList.toggle('is-empty', !valid);
-      render();
-    }
-
-    root.querySelectorAll('[data-step]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var d = btn.getAttribute('data-step').split(':');
-        if (d[0] === 'p') p = Math.min(12, Math.max(3, p + Number(d[1])));
-        else q = Math.min(12, Math.max(3, q + Number(d[1])));
-        update();
-      });
-    });
-
-    function pointerToDisk(e) {
-      var box = canvas.getBoundingClientRect();
-      var x = ((e.clientX - box.left) / box.width * 2 - 1) * 1.02;
-      var y = (1 - (e.clientY - box.top) / box.height * 2) * 1.02;
-      var n = Math.sqrt(x * x + y * y);
-      return n > 0.97 ? [x / n * 0.97, y / n * 0.97] : [x, y];
-    }
-    var last = null;
-    canvas.addEventListener('pointerdown', function (e) {
-      idle = false;
-      last = pointerToDisk(e);
-      canvas.setPointerCapture(e.pointerId);
-    });
-    canvas.addEventListener('pointermove', function (e) {
-      if (!last || !valid) return;
-      var now = pointerToDisk(e);
-      /* Apply the isometry that carries the old pointer position to the new one. */
-      var move = compose(translation(now), translation([-last[0], -last[1]]));
-      var next = compose(move, [alpha, beta]);
-      if (abs2(next[0]) < 4e6) { alpha = next[0]; beta = next[1]; }
-      last = now;
-      render();
-    });
-    ['pointerup', 'pointercancel'].forEach(function (name) {
-      canvas.addEventListener(name, function () { last = null; });
-    });
-
-    /* Until touched, drift gently along a closed path. */
+    /* Drifts gently along a closed path, by hyperbolic isometries. */
     function tick() {
       frame = null;
-      if (!idle || !onScreen) return;
+      if (reduceMotion || !onScreen) return;
       t += 0.004;
       var m = translation([0.42 * Math.cos(t), 0.42 * Math.sin(0.7 * t)]);
       alpha = m[0];
@@ -203,10 +146,10 @@
     }
     whenVisible(canvas, function (v) {
       onScreen = v;
-      if (v && idle && !frame) frame = requestAnimationFrame(tick);
+      if (v && !reduceMotion && !frame) frame = requestAnimationFrame(tick);
     });
     window.addEventListener('resize', render);
-    update();
+    render();
   }
 
   /* ── Figure 2: the modular group acting on its fundamental domain, in both models ── */

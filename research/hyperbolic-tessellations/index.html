@@ -31,7 +31,7 @@
 
   <script defer src="static/js/fontawesome.all.min.js"></script>
   <script defer src="static/js/index.js"></script>
-  <script defer src="static/js/viz.js"></script>
+  <script defer src="static/js/viz.js?v=2"></script>
   <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] } };</script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
@@ -50,9 +50,7 @@
     .viz { margin: 1.5rem auto 2rem; }
     .viz canvas { display: block; width: 100%; touch-action: none; }
     .viz-disk { max-width: 520px; }
-    .viz-disk canvas { aspect-ratio: 1; cursor: grab; }
-    .viz-disk canvas:active { cursor: grabbing; }
-    .viz-disk canvas.is-empty { cursor: default; background: #f8fafc; }
+    .viz-disk canvas { aspect-ratio: 1; touch-action: auto; pointer-events: none; }
     .viz-triangle { max-width: 440px; }
     .viz-triangle canvas { aspect-ratio: 1; cursor: pointer; }
     .viz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -60,8 +58,6 @@
     .viz-pair p { color: #374151; font-size: .9rem; margin: .35rem 0 0 !important; text-align: center; }
     @media (max-width: 600px) { .viz-pair { grid-template-columns: 1fr; } }
     .viz-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin-top: .8rem; font-size: .92rem; color: #374151; }
-    .viz-stepper { display: inline-flex; align-items: center; gap: .35rem; }
-    .viz-stepper b { min-width: 1.4em; text-align: center; }
     .viz-btn { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; color: #1e293b; cursor: pointer; font: inherit; font-size: .9rem; padding: .22rem .65rem; }
     .viz-btn:hover { background: #f1f5f9; }
     .viz-readout { color: #374151; font-size: .92rem; line-height: 1.6; margin-top: .6rem; }
@@ -69,9 +65,16 @@
     .viz-word { font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace; font-size: .88rem; }
     /* keep the long title clear of the fixed More Research button */
     @media (min-width: 769px) { main > .hero:first-child .hero-body { padding-top: 6rem; } }
+    .home-link { position: fixed; top: 2rem; left: 2rem; z-index: 1000; color: #475569; font-size: .9rem; font-weight: 600; }
+    .home-link:hover { color: #1e293b; }
+    @media (max-width: 768px) { .home-link { position: absolute; top: 1rem; left: 1rem; } main > .hero:first-child .hero-body { padding-top: 3.25rem; } }
+    /* Bulma's .content figure rule pushes figures left; keep them centered */
+    .content figure.figure-block, .content figure.viz { margin-left: auto; margin-right: auto; }
   </style>
 </head>
 <body>
+
+  <a class="home-link" href="../../">&#8592; Home</a>
 
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
     <i class="fas fa-chevron-up"></i>
@@ -135,7 +138,9 @@
             </div>
 
             <div class="publication-authors affil">
-              <span class="author-block">Expository paper, Euler Circle, 2025</span>
+              <span class="author-block">Mentor: Benjamin Vakil</span>
+              <br><span class="author-block">Advised by Simon Rubinstein-Salzedo</span>
+              <br><span class="author-block" style="margin-top:.5rem;">Expository paper, Euler Circle, 2025</span>
             </div>
 
             <div class="column has-text-centered">
@@ -172,13 +177,8 @@
       <div class="hero-body">
         <figure class="viz viz-disk" data-viz="tiling" style="margin-top:0;">
           <img src="static/images/tiling-7-3.jpg" alt="A regular {7, 3} tessellation of the Poincaré disk, subdivided into black and white triangles that shrink toward the boundary circle." style="width:100%;display:block;">
-          <canvas aria-label="A regular tessellation of the Poincaré disk. Drag to move it by a hyperbolic isometry."></canvas>
-          <div class="viz-controls">
-            <span class="viz-stepper">p <button class="viz-btn" data-step="p:-1" aria-label="Decrease p">−</button><b data-p>7</b><button class="viz-btn" data-step="p:1" aria-label="Increase p">+</button></span>
-            <span class="viz-stepper">q <button class="viz-btn" data-step="q:-1" aria-label="Decrease q">−</button><b data-q>3</b><button class="viz-btn" data-step="q:1" aria-label="Increase q">+</button></span>
-          </div>
-          <div class="viz-readout" data-status></div>
-          <figcaption class="viz-note">A regular \(\{p, q\}\) tessellation in the Poincaré disk, divided into its reflected \((\pi/p, \pi/q, \pi/2)\) triangles. Drag to apply a Möbius isometry: every tile keeps its true hyperbolic size and shape. Interactive illustration computed for this page; the paper itself has no figures.</figcaption>
+          <canvas aria-label="A regular {7, 3} tessellation of the Poincaré disk, drifting slowly by hyperbolic isometries."></canvas>
+          <figcaption class="viz-note">A regular \(\{7, 3\}\) tessellation in the Poincaré disk, divided into its reflected \((\pi/7, \pi/3, \pi/2)\) triangles, moving by Möbius isometries. Every tile keeps its true hyperbolic size and shape. Animated illustration computed for this page; the paper itself has no figures.</figcaption>
         </figure>
         <h2 class="subtitle has-text-centered">
           Triangles have angle sum less than \(\pi\), circles grow exponentially in size with radius, and infinitely many distinct regular tessellations are possible.

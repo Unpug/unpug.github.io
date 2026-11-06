@@ -76,9 +76,16 @@
     .viz-multiway [data-state] { aspect-ratio: 1; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; max-width: 150px; }
     /* keep the title clear of the fixed More Research button */
     @media (min-width: 769px) { main > .hero:first-child .hero-body { padding-top: 6rem; } }
+    .home-link { position: fixed; top: 2rem; left: 2rem; z-index: 1000; color: #475569; font-size: .9rem; font-weight: 600; }
+    .home-link:hover { color: #1e293b; }
+    @media (max-width: 768px) { .home-link { position: absolute; top: 1rem; left: 1rem; } main > .hero:first-child .hero-body { padding-top: 3.25rem; } }
+    /* Bulma's .content figure rule pushes figures left; keep them centered */
+    .content figure.figure-block, .content figure.viz { margin-left: auto; margin-right: auto; }
   </style>
 </head>
 <body>
+
+  <a class="home-link" href="../../">&#8592; Home</a>
 
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
     <i class="fas fa-chevron-up"></i>

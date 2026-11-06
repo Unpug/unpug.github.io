@@ -1,0 +1,316 @@
+/* moving between pages: the rest of the page crossfades while the sidebar, as a single
+   image, is moved by assets/nav-transition.js */
+@view-transition { navigation: auto; }
+nav { view-transition-name: site-nav; }
+::view-transition-group(site-nav) { animation: none; }
+::view-transition-old(site-nav) { display: none; }
+::view-transition-new(site-nav) { animation: none; opacity: 1; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .4s; animation-timing-function: ease; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}
+* { box-sizing: border-box; }
+p { margin-top: 0; }
+
+body {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cormorant Garamond', serif;
+  -webkit-font-smoothing: antialiased;
+  background: white;
+  min-height: 100vh;
+}
+
+#mc-grid {
+  position: fixed;
+  top: 0; left: 0;
+  display: grid;
+  z-index: 0;
+  user-select: none;
+}
+
+.cell {
+  position: relative;
+  cursor: crosshair;
+}
+.cell:hover    { background: rgba(0,0,0,0.04); }
+.cell.breaking { background: rgba(0,0,0,0.12); }
+.cell.broken   {
+  background: #111;
+  cursor: default;
+  transition: background 0s;
+}
+.cell.regen {
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: background 1.8s ease-out, box-shadow 1.8s ease-out;
+  cursor: crosshair;
+}
+
+/* breaking disabled: no crosshair or hover tint */
+#mc-grid.disabled .cell       { cursor: default; }
+#mc-grid.disabled .cell:hover { background: none; }
+
+.cell .pr-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.cell .pr-wrap span {
+  position: absolute;
+  background: #444;
+}
+.cell .pr-t { top: 0;    left: 0;   height: 3px; width: 0; }
+.cell .pr-r { top: 0;    right: 0;  width: 3px;  height: 0; }
+.cell .pr-b { bottom: 0; right: 0;  height: 3px; width: 0; }
+.cell .pr-l { bottom: 0; left: 0;   width: 3px;  height: 0; }
+
+.particle {
+  position: fixed;
+  border-radius: 1px;
+  pointer-events: none;
+  z-index: 9999;
+  image-rendering: pixelated;
+}
+
+/* mole wrapper clips the canvas so rows reveal one at a time */
+#mole-wrap {
+  position: fixed;
+  overflow: hidden;
+  pointer-events: none; /* enabled from JS only when mole is peeking */
+  z-index: 1000;
+  height: 0;
+  cursor: crosshair;
+}
+#mole-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  image-rendering: pixelated;
+}
+
+#site {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  pointer-events: none;
+}
+
+.wrapper {
+  display: flex;
+  padding: 48px 0;
+  padding-top: 140px;
+}
+
+nav {
+  width: 160px;
+  padding-right: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+a { pointer-events: auto; }
+nav a { color: black; text-decoration: none; }
+nav a:visited { color: black; }
+
+/* contact dropdown */
+.contact-wrap {
+  position: relative;   /* anchors the absolute dropdown */
+  pointer-events: auto;
+  cursor: default;
+  user-select: none;
+}
+
+.contact-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.contact-arrow {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.contact-wrap.open .contact-arrow,
+.contact-wrap.closing .contact-arrow {
+  opacity: 1;
+}
+
+.contact-dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  pointer-events: none;
+}
+
+/* allow the dropdown container to receive mouse events while open */
+.contact-wrap.open .contact-dropdown,
+.contact-wrap.closing .contact-dropdown {
+  pointer-events: auto;
+}
+
+.contact-dropdown a {
+  color: black;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0s, transform 0s;
+  pointer-events: none;
+}
+
+/* ── open: fade in top → bottom ── */
+.contact-wrap.open .contact-dropdown a {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.contact-wrap.open .contact-dropdown a:nth-child(1) { transition-delay: 0s; }
+.contact-wrap.open .contact-dropdown a:nth-child(2) { transition-delay: 0.07s; }
+.contact-wrap.open .contact-dropdown a:nth-child(3) { transition-delay: 0.14s; }
+.contact-wrap.open .contact-dropdown a:nth-child(4) { transition-delay: 0.21s; }
+
+/* ── closing: fade out bottom → top ── */
+.contact-wrap.closing .contact-dropdown a {
+  opacity: 0;
+  transform: translateY(-3px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.contact-wrap.closing .contact-dropdown a:nth-child(4) { transition-delay: 0s; }
+.contact-wrap.closing .contact-dropdown a:nth-child(3) { transition-delay: 0.07s; }
+.contact-wrap.closing .contact-dropdown a:nth-child(2) { transition-delay: 0.14s; }
+.contact-wrap.closing .contact-dropdown a:nth-child(1) { transition-delay: 0.21s; }
+
+.content { width: 500px; }
+.content ul { margin: 0 0 1em; padding-left: 20px; }
+.content li { margin-bottom: 8px; }
+/* work page: title, venue line, muted keyword line */
+.content .section-label { color: #888; font-size: 24px; margin-bottom: 20px; }
+.content ul.entries     { list-style: none; padding-left: 0; }
+.content ul.entries li  { margin-bottom: 22px; }
+.content .paper-image { display: block; margin: 12px 0; }
+.content .paper-image img { display: block; max-width: 100%; max-height: 230px; }
+
+/* with a mouse, images slide down when hovering a paper; touch screens always show them */
+@media (hover: hover) {
+  .content ul.entries li { pointer-events: auto; }
+  .content .paper-image {
+    display: grid;
+    grid-template-rows: 0fr;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: grid-template-rows .55s cubic-bezier(.22, 1, .36, 1), margin .55s cubic-bezier(.22, 1, .36, 1), opacity .4s ease;
+    /* close a beat after the next one opens, so the list doesn't jump out from under the cursor */
+    transition-delay: .22s;
+  }
+  .content .paper-image > * {
+    min-height: 0;
+    transform: translateY(-10px);
+    transition: transform .55s cubic-bezier(.22, 1, .36, 1);
+  }
+  .content ul.entries li:hover .paper-image,
+  .content ul.entries li:focus-within .paper-image {
+    grid-template-rows: 1fr;
+    margin: 12px 0;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+  .content ul.entries li:hover .paper-image > *,
+  .content ul.entries li:focus-within .paper-image > * { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .content .paper-image, .content .paper-image > * { transition: none !important; }
+}
+.content .venue    { margin-top: 2px; }
+.content .keywords { margin-top: 2px; color: #888; font-size: 14px; font-style: italic; }
+/* placeholder for details still to fill in */
+.content .todo { color: #c33; font-size: 13px; }
+.page { display: none; }
+.page.active { display: block; }
+.content a { color: black; text-decoration: none; }
+.content a:visited { color: black; }
+.content a.ref {
+  text-decoration: underline dotted #555;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+/* phones: nav becomes a row above the text */
+@media (max-width: 720px) {
+  .wrapper { flex-direction: column; width: 100%; padding: 40px 20px 48px; }
+  .content { width: 100%; }
+  nav { width: auto; padding-right: 0; flex-direction: row; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 32px; }
+  .contact-wrap { display: contents; }
+  .contact-dropdown { position: static; flex-basis: 100%; flex-direction: row; flex-wrap: wrap; gap: 6px 16px; margin-top: 0; }
+  .contact-wrap:not(.open):not(.closing) .contact-dropdown { display: none; }
+}
+
+#quote-overlay {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 20;
+  max-width: 600px;
+  width: 90%;
+  line-height: 1.8;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  pointer-events: none;
+}
+
+#quote-overlay .quote-text {
+  margin: 0;
+}
+
+#quote-overlay .quote-attr {
+  margin-top: 20px;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+#conway-veil {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 1.6s ease;
+  pointer-events: none;
+}
+
+#back-btn {
+  display: none;
+  position: fixed;
+  top: 96px;
+  left: calc(50% - 330px);
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 25;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  align-items: center;
+  gap: 5px;
+  pointer-events: auto;
+  user-select: none;
+}

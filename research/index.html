@@ -1,120 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>Research | Thantham (AJ) Jittham</title>
-  <meta name="description" content="Papers and essays by Thantham (AJ) Jittham, from perovskite photovoltaics and radiative cooling to cellular automata and commutative algebra.">
-  <meta name="author" content="Thantham Jittham">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Research | Thantham (AJ) Jittham">
-  <meta property="og:description" content="Papers and essays by Thantham (AJ) Jittham.">
-  <meta property="og:url" content="https://unpug.github.io/research/">
-
-  <link rel="icon" type="image/x-icon" href="slot-die-perovskites/static/images/favicon.ico">
-  <link rel="stylesheet" href="slot-die-perovskites/static/css/bulma.min.css">
-  <link rel="stylesheet" href="slot-die-perovskites/static/css/index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    .hub-header .hero-body { padding-bottom: 1.5rem; }
-    .paper-list { display: grid; gap: 1rem; }
-    .paper-card {
-      display: block; padding: 1.5rem; background: #fff; color: inherit;
-      border: 1px solid #e5e7eb; border-radius: 14px; transition: var(--transition);
-    }
-    a.paper-card:hover { border-color: var(--primary-color); box-shadow: var(--shadow-md); color: inherit; }
-    .paper-card.has-thumb { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: center; }
-    .paper-card img { width: 100%; border-radius: 10px; border: 1px solid #e5e7eb; display: block; }
-    .paper-title { font-size: 1.2rem; font-weight: 700; color: #111827; line-height: 1.35; margin-bottom: .4rem; }
-    .paper-venue { color: #374151; line-height: 1.5; }
-    .paper-keywords { color: #6b7280; font-size: .92rem; font-style: italic; margin-top: .4rem; line-height: 1.5; }
-    .paper-link { color: #b45309; font-size: .9rem; font-weight: 600; margin-top: .6rem; }
-    @media (max-width: 768px) { .paper-card.has-thumb { grid-template-columns: 1fr; } }
-  </style>
+  <script src="../assets/nav-transition.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
-  <main id="main-content">
 
-  <section class="hero hub-header">
-    <div class="hero-body">
-      <div class="container is-max-desktop has-text-centered">
-        <h1 class="title is-1 publication-title">Research</h1>
-        <p class="subtitle is-4" style="color:#6b7280;">Thantham (AJ) Jittham · Cornell University</p>
-        <div class="publication-links">
-          <span class="link-block"><a href="../" class="external-link button is-normal is-rounded is-dark">Home</a></span>
-          <span class="link-block"><a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">Google Scholar</a></span>
-          <span class="link-block"><a href="https://github.com/Unpug" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">GitHub</a></span>
+<div id="mc-grid"></div>
+<div id="mole-wrap"><canvas id="mole-canvas"></canvas></div>
+<div id="conway-veil"></div>
+<div id="back-btn">&#8592; Back</div>
+<div id="quote-overlay">
+  <p class="quote-text">"You don't educate people by telling them useful things; you educate people by telling them interesting things"</p>
+  <p class="quote-attr">— John Conway</p>
+</div>
+
+<div id="site">
+  <div class="wrapper">
+    <nav>
+      <a href="../">About</a>
+      <a href="../love/">Love</a>
+      <a href="./">Research</a>
+      <div class="contact-wrap">
+        <div class="contact-label">Contact <span class="contact-arrow">›</span></div>
+        <div class="contact-dropdown">
+          <a href="https://linkedin.com/in/thantham" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a>
+          <a href="mailto:thantham61@gmail.com" target="_blank">Email</a>
         </div>
       </div>
-    </div>
-  </section>
+    </nav>
 
-  <section class="section" style="padding-top:0;">
-    <div class="container is-max-desktop">
-      <div class="paper-list">
-
-        <a class="paper-card has-thumb" href="slot-die-perovskites/">
-          <img src="slot-die-perovskites/static/images/fig3-setup.jpg" alt="Schematic illustration of a slot-die coating setup.">
-          <div>
-            <div class="paper-title">Comprehensive Review on Slot-Die-Based Perovskite Photovoltaics: Mechanisms, Materials, Methods, and Marketability</div>
-            <div class="paper-venue">Advanced Energy Materials, 2024 · Frontispiece article</div>
-            <div class="paper-keywords">Halide perovskites, slot-die coating, scalable photovoltaics</div>
-            <div class="paper-link">Project page →</div>
-          </div>
-        </a>
-
-        <a class="paper-card" href="https://doi.org/10.1002/smsc.70311" target="_blank" rel="noopener">
-          <div class="paper-title">Enhancing the Transparency–Temperature Trade-off through Spectral Engineering and Radiative Cooling</div>
-          <div class="paper-venue">Small Science, 2026</div>
-          <div class="paper-keywords">Spectral engineering, optical transparency, passive radiative cooling</div>
-          <div class="paper-link">Paper →</div>
-        </a>
-
-        <a class="paper-card" href="https://community.wolfram.com/t/wsrp25-on-the-density-and-multiway-spectral-theory-of-aggregation-systems/25762" target="_blank" rel="noopener">
-          <div class="paper-title">On the Density and Multiway Spectral Theory of Aggregation Systems</div>
-          <div class="paper-venue">Computational essay, Wolfram Summer Research Program 2025 · Staff pick; presented at the program meeting</div>
-          <div class="paper-keywords">Aggregation systems, cellular automata, density, multiway graphs, spectral graph theory</div>
-          <div class="paper-link">Essay →</div>
-        </a>
-
-        <a class="paper-card" href="https://www.researchgate.net/publication/396479001_Group_Actions_and_Mobius_Symmetries_in_Hyperbolic_Tessellations" target="_blank" rel="noopener">
-          <div class="paper-title">Group Actions and Möbius Symmetries in Hyperbolic Tessellations</div>
-          <div class="paper-venue">Expository paper, Euler Circle 2025</div>
-          <div class="paper-keywords">Group actions, Möbius transformations, hyperbolic plane, tessellations</div>
-          <div class="paper-link">Paper →</div>
-        </a>
-
-        <a class="paper-card" href="https://artofproblemsolving.com/polymath/mitprimes2025/p" target="_blank" rel="noopener">
-          <div class="paper-title">Goldbach Semidomains</div>
-          <div class="paper-venue">MIT PRIMES CrowdMath 2025</div>
-          <div class="paper-keywords">Semidomains, factorization theory, Goldbach property, commutative algebra</div>
-          <div class="paper-link">Project →</div>
-        </a>
-
+    <div class="content">
+      <div class="page active" id="research">
+        <p class="section-label" id="publications">research</p>
+        <ul class="entries">
+          <li>
+            <div><a class="ref" href="slot-die-perovskites/" target="_blank" rel="noopener">comprehensive review on slot-die-based perovskite photovoltaics</a></div>
+            <a class="paper-image" href="slot-die-perovskites/" target="_blank" rel="noopener"><img src="slot-die-perovskites/static/images/fig3-setup.jpg" alt="Schematic of a slot-die coating setup, from the paper."></a>
+            <div class="venue">advanced energy materials, 2024. frontispiece article.</div>
+            <div class="keywords">halide perovskites, slot-die coating, scalable photovoltaics</div>
+          </li>
+          <li>
+            <div><a class="ref" href="radiative-cooling-films/" target="_blank" rel="noopener">enhancing the transparency–temperature trade-off through spectral engineering and radiative cooling</a></div>
+            <a class="paper-image" href="radiative-cooling-films/" target="_blank" rel="noopener"><img src="radiative-cooling-films/static/images/social_preview.jpg" alt="The dual-film greenhouse design, from the paper."></a>
+            <div class="venue">small science, 2026.</div>
+            <div class="keywords">spectral engineering, optical transparency, passive radiative cooling</div>
+          </li>
+          <li>
+            <div><a class="ref" href="aggregation-systems/" target="_blank" rel="noopener">on the density and multiway spectral theory of aggregation systems</a></div>
+            <a class="paper-image" href="aggregation-systems/" target="_blank" rel="noopener"><img src="aggregation-systems/static/images/growth-rules.jpg" alt="Four aggregation clusters colored by cell state, from the essay."></a>
+            <div class="venue">computational essay, wolfram summer research program, 2025. staff pick; presented at the program meeting.</div>
+            <div class="keywords">aggregation systems, cellular automata, density, multiway graphs, spectral graph theory</div>
+          </li>
+          <li>
+            <div><a class="ref" href="hyperbolic-tessellations/" target="_blank" rel="noopener">group actions and möbius symmetries in hyperbolic tessellations</a></div>
+            <a class="paper-image" href="hyperbolic-tessellations/" target="_blank" rel="noopener"><img src="hyperbolic-tessellations/static/images/tiling-7-3.jpg" alt="A regular {7, 3} tessellation of the Poincaré disk, computed for the paper's page."></a>
+            <div class="venue">expository paper, euler circle, 2025.</div>
+            <div class="keywords">group actions, möbius transformations, hyperbolic plane, tessellations</div>
+          </li>
+          <li>
+            <div><a class="ref" href="https://artofproblemsolving.com/polymath/mitprimes2025/p" target="_blank" rel="noopener">goldbach semidomains</a></div>
+            <a class="paper-image" href="https://artofproblemsolving.com/polymath/mitprimes2025/p" target="_blank" rel="noopener"><span><img src="images/goldbach-comet.jpg" alt="Goldbach's comet: for each even number up to 30,000, the number of ways to write it as a sum of two primes."><span class="keywords" style="display:block;">image: goldbach's comet, computed for this page, not from the project.</span></span></a>
+            <div class="venue">mit primes crowdmath, 2025.</div>
+            <div class="keywords">semidomains, factorization theory, goldbach property, commutative algebra</div>
+          </li>
+        </ul>
+        <br>
       </div>
     </div>
-  </section>
-  </main>
+  </div>
+</div>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="columns is-centered">
-        <div class="column is-8">
-          <div class="content">
-            <p>
-              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>, which was adapted from the
-              <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page, and is licensed under a
-              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-              The slot-die figure is from K. K. Shin Thant et al., <i>Adv. Energy Mater.</i> 2025, 15, 2403088, under the
-              <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 License</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+<script src="../assets/site.js"></script>
 </body>
 </html>

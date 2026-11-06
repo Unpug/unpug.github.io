@@ -64,9 +64,16 @@
     .content p { line-height: 1.75; }
     blockquote.contrib { border-left: 4px solid #f59e0b; background: #fffbeb; }
     .eq { overflow-x: auto; }
+    .home-link { position: fixed; top: 2rem; left: 2rem; z-index: 1000; color: #475569; font-size: .9rem; font-weight: 600; }
+    .home-link:hover { color: #1e293b; }
+    @media (max-width: 768px) { .home-link { position: absolute; top: 1rem; left: 1rem; } main > .hero:first-child .hero-body { padding-top: 3.25rem; } }
+    /* Bulma's .content figure rule pushes figures left; keep them centered */
+    .content figure.figure-block, .content figure.viz { margin-left: auto; margin-right: auto; }
   </style>
 </head>
 <body>
+
+  <a class="home-link" href="../../">&#8592; Home</a>
 
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
     <i class="fas fa-chevron-up"></i>
@@ -85,8 +92,7 @@
         <button class="close-btn" onclick="toggleMoreWorks()"><i class="fas fa-times"></i></button>
       </div>
       <div class="works-list">
-        <!-- TODO: point these at their own pages once built -->
-        <a href="https://doi.org/10.1002/smsc.70311" target="_blank" rel="noopener" class="work-item">
+        <a href="../radiative-cooling-films/" class="work-item">
           <div class="work-info">
             <h5>Enhancing the Transparency–Temperature Trade-off through Spectral Engineering and Radiative Cooling</h5>
             <p>Spectral engineering and passive radiative cooling.</p>
@@ -94,7 +100,7 @@
           </div>
           <i class="fas fa-arrow-right"></i>
         </a>
-        <a href="https://community.wolfram.com/t/wsrp25-on-the-density-and-multiway-spectral-theory-of-aggregation-systems/25762" target="_blank" rel="noopener" class="work-item">
+        <a href="../aggregation-systems/" class="work-item">
           <div class="work-info">
             <h5>On the Density and Multiway Spectral Theory of Aggregation Systems</h5>
             <p>Computational essay; staff pick.</p>
