@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Group Actions and Möbius Symmetries in Hyperbolic Tessellations | Expositio</title>
+  <meta name="description" content="An expository paper on tessellations of the hyperbolic plane from a differential-geometric viewpoint, deriving the existence criterion for regular {p, q} tilings.">
+  <meta name="keywords" content="group actions, Möbius transformations, hyperbolic plane, tessellations">
+  <meta name="author" content="Aaditya Bilakanti, Palaash Gang, Thantham Jittham">
+
+  <!-- Social previews -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Group Actions and Möbius Symmetries in Hyperbolic Tessellations">
+  <meta property="og:description" content="Tessellations of the hyperbolic plane from a differential-geometric viewpoint. Expository paper, 2025.">
+  <meta property="og:url" content="https://unpug.github.io/research/hyperbolic-tessellations/">
+  <meta property="og:image" content="https://unpug.github.io/research/hyperbolic-tessellations/static/images/tiling-7-3.jpg">
+
+  <!-- Google Scholar -->
+  <meta name="citation_title" content="Group Actions and Möbius Symmetries in Hyperbolic Tessellations">
+  <meta name="citation_author" content="Bilakanti, Aaditya">
+  <meta name="citation_author" content="Gang, Palaash">
+  <meta name="citation_author" content="Jittham, Thantham">
+  <meta name="citation_publication_date" content="2025">
+
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  <script defer src="static/js/viz.js"></script>
+  <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] } };</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    .figure-block { margin: 0 auto 2rem; max-width: 520px; }
+    .figure-block img { width: 100%; display: block; }
+    .figure-block figcaption { color: #6b7280; font-size: .92rem; margin-top: .6rem; text-align: left; line-height: 1.5; }
+    .section-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; font-weight: 700; color: #b45309; margin-bottom: .25rem; }
+    .author-block.me { font-weight: 700; }
+    .affil { font-size: 1rem; color: #4b5563; }
+    .content p { line-height: 1.75; }
+    .eq { overflow-x: auto; }
+    .table-wrap { overflow-x: auto; }
+    .content table th { white-space: nowrap; }
+    .content table td, .content table th { line-height: 1.6; }
+    .viz { margin: 1.5rem auto 2rem; }
+    .viz canvas { display: block; width: 100%; touch-action: none; }
+    .viz-disk { max-width: 520px; }
+    .viz-disk canvas { aspect-ratio: 1; cursor: grab; }
+    .viz-disk canvas:active { cursor: grabbing; }
+    .viz-disk canvas.is-empty { cursor: default; background: #f8fafc; }
+    .viz-triangle { max-width: 440px; }
+    .viz-triangle canvas { aspect-ratio: 1; cursor: pointer; }
+    .viz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .viz-pair canvas { aspect-ratio: 4 / 3; border: 1px solid #e5e7eb; border-radius: 6px; }
+    .viz-pair p { color: #374151; font-size: .9rem; margin: .35rem 0 0 !important; text-align: center; }
+    @media (max-width: 600px) { .viz-pair { grid-template-columns: 1fr; } }
+    .viz-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin-top: .8rem; font-size: .92rem; color: #374151; }
+    .viz-stepper { display: inline-flex; align-items: center; gap: .35rem; }
+    .viz-stepper b { min-width: 1.4em; text-align: center; }
+    .viz-btn { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; color: #1e293b; cursor: pointer; font: inherit; font-size: .9rem; padding: .22rem .65rem; }
+    .viz-btn:hover { background: #f1f5f9; }
+    .viz-readout { color: #374151; font-size: .92rem; line-height: 1.6; margin-top: .6rem; }
+    .viz-note { color: #6b7280; font-size: .92rem; line-height: 1.5; margin-top: .6rem; text-align: left; }
+    .viz-word { font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace; font-size: .88rem; }
+    /* keep the long title clear of the fixed More Research button */
+    @media (min-width: 769px) { main > .hero:first-child .hero-body { padding-top: 6rem; } }
+  </style>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Research -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="More research">
+      <i class="fas fa-flask"></i>
+      More Research
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Research</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="works-list">
+        <a href="../aggregation-systems/" class="work-item">
+          <div class="work-info">
+            <h5>On the Density and Multiway Spectral Theory of Aggregation Systems</h5>
+            <p>Computational essay; staff pick.</p>
+            <span class="work-venue">Wolfram Summer Research Program 2025</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="../radiative-cooling-films/" class="work-item">
+          <div class="work-info">
+            <h5>Enhancing the Transparency–Temperature Trade-Off Through Spectral Engineering and Radiative Cooling</h5>
+            <p>Spectral engineering and passive radiative cooling.</p>
+            <span class="work-venue">Small Science 2026</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="../" class="work-item">
+          <div class="work-info">
+            <h5>All research</h5>
+            <p>Every paper in one place.</p>
+            <span class="work-venue">Index</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+  <!-- Title -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Group Actions and Möbius Symmetries in Hyperbolic Tessellations</h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Aaditya Bilakanti,</span>
+              <span class="author-block">Palaash Gang,</span>
+              <span class="author-block me">Thantham Jittham</span>
+            </div>
+
+            <div class="publication-authors affil">
+              <span class="author-block">Expository paper, Euler Circle, 2025</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://expositio.org/papers/exp-20260628-a87bee/" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Expositio</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://www.researchgate.net/publication/396479001_Group_Actions_and_Mobius_Symmetries_in_Hyperbolic_Tessellations" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                    <span>ResearchGate</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#BibTeX" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-quote-right"></i></span>
+                    <span>Cite</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <figure class="viz viz-disk" data-viz="tiling" style="margin-top:0;">
+          <img src="static/images/tiling-7-3.jpg" alt="A regular {7, 3} tessellation of the Poincaré disk, subdivided into black and white triangles that shrink toward the boundary circle." style="width:100%;display:block;">
+          <canvas aria-label="A regular tessellation of the Poincaré disk. Drag to move it by a hyperbolic isometry."></canvas>
+          <div class="viz-controls">
+            <span class="viz-stepper">p <button class="viz-btn" data-step="p:-1" aria-label="Decrease p">−</button><b data-p>7</b><button class="viz-btn" data-step="p:1" aria-label="Increase p">+</button></span>
+            <span class="viz-stepper">q <button class="viz-btn" data-step="q:-1" aria-label="Decrease q">−</button><b data-q>3</b><button class="viz-btn" data-step="q:1" aria-label="Increase q">+</button></span>
+          </div>
+          <div class="viz-readout" data-status></div>
+          <figcaption class="viz-note">A regular \(\{p, q\}\) tessellation in the Poincaré disk, divided into its reflected \((\pi/p, \pi/q, \pi/2)\) triangles. Drag to apply a Möbius isometry: every tile keeps its true hyperbolic size and shape. Interactive illustration computed for this page; the paper itself has no figures.</figcaption>
+        </figure>
+        <h2 class="subtitle has-text-centered">
+          Triangles have angle sum less than \(\pi\), circles grow exponentially in size with radius, and infinitely many distinct regular tessellations are possible.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              This expository paper explains tessellations of the hyperbolic plane from a differential–geometric viewpoint. We review the upper half–plane (\(\mathbb{H}\)) and Poincaré disk (\(\mathbb{D}\)) models and the
+              Cayley transform linking them. We prove that orientation–preserving isometries are precisely \(\mathrm{PSL}(2, \mathbb{R})\) acting by Möbius/Blaschke maps and show these maps are conformal and hyperbolic isometries
+              (hence length– and area–preserving). Using group actions of discrete subgroups (Fuchsian groups), we construct tessellations from fundamental domains; the modular group serves as a guiding example. Via
+              Gauß–Bonnet and reflection/triangle–group constructions we derive the existence criterion for regular \(\{p, q\}\) tilings, namely \(\frac{1}{p} + \frac{1}{q} < \frac{1}{2}\), and relate angle defect to area.
+              Throughout the article, we highlight geodesics, curvature \(K \equiv -1\), and the role of isometries in organizing hyperbolic tilings.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Models -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Models</p>
+      <h2 class="title is-3">Two views of the same plane</h2>
+      <p>
+        Hyperbolic geometry emerged in the nineteenth century from the realization that Euclid’s parallel postulate could be replaced, producing a logically consistent geometry of constant negative curvature.
+        There are many models of the hyperbolic plane. We define two that we use throughout.
+      </p>
+      <p>
+        The upper half-plane \(\mathbb{H}\) is the set of complex numbers \(z = x + iy\) such that \(\Im(z) > 0\). In the upper half-plane model, hyperbolic geodesics are precisely the vertical Euclidean lines and
+        the Euclidean semicircles whose centers lie on \(\mathbb{R}\). The Poincaré disk model, denoted \(\mathbb{D}\), is the open unit disk in the complex plane. Hyperbolic geodesics in \(\mathbb{D}\) are the Euclidean
+        diameters and circular arcs that meet \(\partial\mathbb{D}\) orthogonally.
+      </p>
+      <div class="eq">
+        \[ ds^2_{\mathbb{H}} = \frac{dx^2 + dy^2}{y^2}, \qquad ds^2_{\mathbb{D}} = \frac{4\,|dz|^2}{(1 - |z|^2)^2} \]
+      </div>
+      <p>The Cayley map \(\Phi : \mathbb{H} \to \mathbb{D}\) and its inverse are</p>
+      <div class="eq">
+        \[ \Phi(z) = \frac{z - i}{z + i}, \qquad \Phi^{-1}(w) = i\,\frac{1 + w}{1 - w}, \]
+      </div>
+      <p>and \(\Phi\) is an isometry between the two models.</p>
+    </div>
+  </section>
+
+  <!-- 2. Symmetry -->
+  <section class="section has-background-light">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Symmetry</p>
+      <h2 class="title is-3">Möbius transformations</h2>
+      <p>The full isometry group of the hyperbolic plane satisfies \(\mathrm{Isom}(\mathbb{H}) \cong \mathrm{PGL}(2, \mathbb{R})\), while the subgroup of orientation-preserving isometries is</p>
+      <div class="eq">
+        \[ \mathrm{Isom}^+(\mathbb{H}) \cong \mathrm{PSL}(2, \mathbb{R}) = \mathrm{SL}(2, \mathbb{R}) / \{\pm I\}. \]
+      </div>
+      <p>Every orientation-preserving isometry of \(\mathbb{H}\) is given by a fractional linear map, unique up to an overall sign, and every Möbius transformation of the Poincaré disk can be written uniquely as</p>
+      <div class="eq">
+        \[ \varphi(z) = \frac{az + b}{cz + d}, \quad \begin{pmatrix} a & b \\ c & d \end{pmatrix} \in \mathrm{SL}(2, \mathbb{R}), \qquad\qquad f(z) = e^{i\theta}\,\frac{z - a}{1 - \bar{a}z}, \quad a \in \mathbb{D},\ \theta \in \mathbb{R}. \]
+      </div>
+      <p>These disk Möbius maps are conformal, and the identity \(f^*(ds^2_{\mathbb{D}}) = ds^2_{\mathbb{D}}\) shows \(f\) preserves lengths and areas.</p>
+      <p>
+        A Fuchsian group \(\Gamma\) is a discrete subgroup \(\Gamma \le \mathrm{PSL}(2, \mathbb{R})\) acting properly discontinuously on \(\mathbb{H}\). A fundamental domain for \(\Gamma\) is a closed region
+        \(D \subset \mathbb{H}\) such that \(\bigcup_{\gamma \in \Gamma} \gamma(D) = \mathbb{H}\), and the interiors of \(D\) and \(\gamma(D)\) are disjoint for \(\gamma \ne e\). The images \(\{\gamma(D) : \gamma \in \Gamma\}\) then
+        tessellate \(\mathbb{H}\).
+      </p>
+      <p>The subgroup \(\mathrm{PSL}(2, \mathbb{Z})\) generated by \(z \mapsto z + 1\) and \(z \mapsto -1/z\) is a classic Fuchsian group. A standard fundamental domain is</p>
+      <div class="eq">
+        \[ D = \left\{ z \in \mathbb{H} : |z| \ge 1,\ |\Re z| \le \tfrac{1}{2} \right\}. \]
+      </div>
+      <figure class="viz" data-viz="modular">
+        <div class="viz-pair">
+          <div><canvas aria-label="The modular tessellation in the upper half-plane, with one fundamental domain highlighted."></canvas><p>Upper half-plane \(\mathbb{H}\)</p></div>
+          <div><canvas aria-label="The same tessellation in the Poincaré disk, with the same domain highlighted."></canvas><p>Poincaré disk \(\mathbb{D}\), through the Cayley map \(\Phi\)</p></div>
+        </div>
+        <div class="viz-controls">
+          <span>Apply:</span>
+          <button class="viz-btn" data-gen="T">T: z + 1</button>
+          <button class="viz-btn" data-gen="T⁻¹">T⁻¹: z − 1</button>
+          <button class="viz-btn" data-gen="S">S: −1/z</button>
+          <button class="viz-btn" data-reset>Reset</button>
+          <span class="viz-word" data-word></span>
+        </div>
+        <figcaption class="viz-note">The domain \(D\) in orange, moved by the group action. Each button applies a generator to the current copy \(\gamma(D)\), and the two views show the same point at every moment, because \(\Phi\) is an isometry. Interactive illustration computed for this page.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 3. Tilings -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Tessellations</p>
+      <h2 class="title is-3">When does a {p, q} tiling exist?</h2>
+      <p>
+        A \(\{p, q\}\) tessellation means that each face is a regular \(p\)-gon and that \(q\) faces meet at a vertex. For a hyperbolic triangle \(\Delta\) with internal angles \(\alpha, \beta, \gamma\), Gauß–Bonnet with
+        \(K \equiv -1\) gives the area as the angle defect, and cutting a polygon into triangles generalizes this:
+      </p>
+      <div class="eq">
+        \[ \mathrm{Area}(\Delta) = \pi - (\alpha + \beta + \gamma), \qquad \mathrm{Area}(P) = (n - 2)\pi - \sum_{i=1}^{n} \alpha_i. \]
+      </div>
+      <figure class="viz viz-triangle" data-viz="triangle">
+        <canvas aria-label="A geodesic triangle in the Poincaré disk with three draggable vertices."></canvas>
+        <div class="viz-readout">
+          α = <b data-a></b>, β = <b data-b></b>, γ = <b data-c></b><br>
+          α + β + γ = <b data-sum></b>, always less than 180°<br>
+          Area = π − (α + β + γ) = <b data-area></b>
+        </div>
+        <figcaption class="viz-note">Drag the corners. Pull them toward the boundary and the angles shrink toward 0, while the area approaches its limit of \(\pi\). Interactive illustration computed for this page.</figcaption>
+      </figure>
+      <p>
+        There exists a \(\{p, q\}\) tessellation for a given \(p\) and \(q\) if and only if \(\frac{1}{p} + \frac{1}{q} < \frac{1}{2}\). For the forward direction, a hyperbolic \(p\)-gon has positive area with interior angle
+        \(\alpha = \frac{2\pi}{q}\), so
+      </p>
+      <div class="eq">
+        \[ (p - 2)\pi - \frac{2p\pi}{q} > 0 \quad\Longrightarrow\quad \frac{1}{p} + \frac{1}{q} < \frac{1}{2}. \]
+      </div>
+      <p>
+        For the backward direction, take a hyperbolic triangle \(T\) whose interior angles are \(\pi/p, \pi/q, \pi/2\). The index-2 subgroup \(G^+\) of the reflection group \(G\) acts on \(\mathbb{H}\) with fundamental
+        domain a regular \(p\)-gon whose interior angle is \(2\pi/q\). The orbit of this \(p\)-gon under \(G^+\) is a regular \(\{p, q\}\) tessellation.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. Comparison -->
+  <section class="section has-background-light">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Comparison</p>
+      <h2 class="title is-3">Three geometries</h2>
+      <p>Hyperbolic geometry is one of the three classical geometries of constant Gaussian curvature alongside Euclidean and Spherical geometry.</p>
+      <div class="table-wrap">
+        <table class="table is-fullwidth" style="background:transparent;">
+          <thead>
+            <tr><th></th><th>Euclidean</th><th>Spherical</th><th>Hyperbolic</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Curvature</th><td>\(K = 0\)</td><td>\(K = 1/R^2 > 0\)</td><td>\(K = -1/R^2 < 0\)</td></tr>
+            <tr><th>Geodesics</th><td>Straight lines</td><td>Great circles</td><td>Vertical lines and semicircles orthogonal to \(y = 0\)</td></tr>
+            <tr><th>Triangle angle sum</th><td>Exactly \(\pi\)</td><td>Exceeds \(\pi\)</td><td>Strictly less than \(\pi\)</td></tr>
+            <tr><th>Parallels through a point</th><td>Exactly one</td><td>None</td><td>Infinitely many</td></tr>
+            <tr><th>Circumference \(C(r)\)</th><td>\(2\pi r\)</td><td>\(2\pi R \sin(r/R)\)</td><td>\(2\pi R \sinh(r/R)\)</td></tr>
+            <tr><th>Area \(A(r)\)</th><td>\(\pi r^2\)</td><td>\(2\pi R^2 (1 - \cos(r/R))\)</td><td>\(2\pi R^2 (\cosh(r/R) - 1)\)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        In hyperbolic geometry, both circumference and area grow exponentially with \(r\), a fact directly tied to the richness of possible tessellations. These metric differences have direct combinatorial implications: in the
+        Euclidean plane, regular tessellations exist only for \(\{3, 6\}\), \(\{4, 4\}\), and \(\{6, 3\}\), while in the hyperbolic plane, infinitely many \(\{p, q\}\)-tessellations exist whenever
+        \(\frac{1}{p} + \frac{1}{q} < \frac{1}{2}\).
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. Future directions -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Future directions</p>
+      <h2 class="title is-3">Open questions</h2>
+      <p>Despite the extensive development of hyperbolic geometry and tessellation theory, many intriguing open questions remain.</p>
+      <ul>
+        <li><b>Classification of hyperbolic tilings.</b> What broader families of tilings exist beyond the regular and semi-regular cases?</li>
+        <li><b>Growth rates and combinatorics.</b> How does the number of tiles grow as a function of hyperbolic distance from a fixed point? What combinatorial invariants distinguish different tessellations?</li>
+        <li><b>Tessellations and topology.</b> What kinds of topological surfaces can be realized as quotients of the hyperbolic plane by tessellations induced from Fuchsian groups?</li>
+        <li><b>Connections to group theory.</b> How do properties of tessellations reflect properties of the corresponding Fuchsian or triangle groups?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@misc{bilakanti2025hyperbolic,
+  title        = {Group Actions and M{\"o}bius Symmetries in Hyperbolic Tessellations},
+  author       = {Bilakanti, Aaditya and Gang, Palaash and Jittham, Thantham},
+  year         = {2025},
+  howpublished = {Expository paper, Euler Circle},
+  url          = {https://expositio.org/papers/exp-20260628-a87bee/}
+}</code></pre>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Text and equations are from A. Bilakanti, P. Gang, and T. Jittham, “Group Actions and Möbius Symmetries in Hyperbolic Tessellations,” 2025. Text is excerpted and lightly condensed. The interactive illustrations were computed for this page and are not from the paper.
+            </p>
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>, which was adapted from the
+              <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page, and is licensed under a
+              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

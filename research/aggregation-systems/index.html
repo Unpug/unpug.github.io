@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>On the Density and Multiway Spectral Theory of Aggregation Systems | Wolfram Community</title>
+  <meta name="description" content="A computational framework for exhaustive generation of biased cellular-automaton aggregation systems and its influence on structural density. Wolfram High School Summer Research Program 2025; Wolfram Community Staff Pick.">
+  <meta name="keywords" content="aggregation systems, cellular automata, density, multiway graphs, spectral graph theory">
+  <meta name="author" content="Thantham Jittham">
+
+  <!-- Social previews -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="On the Density and Multiway Spectral Theory of Aggregation Systems">
+  <meta property="og:description" content="Biased cellular-automaton aggregation systems, density, and multiway graphs. Wolfram Community Staff Pick.">
+  <meta property="og:url" content="https://unpug.github.io/research/aggregation-systems/">
+  <meta property="og:image" content="https://unpug.github.io/research/aggregation-systems/static/images/social_preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Google Scholar -->
+  <meta name="citation_title" content="On the Density and Multiway Spectral Theory of Aggregation Systems">
+  <meta name="citation_author" content="Jittham, Thantham">
+  <meta name="citation_publication_date" content="2025">
+
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  <script defer src="static/js/viz.js"></script>
+  <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] } };</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    .badge {
+      display: inline-block; margin: .75rem .25rem 0; padding: .3rem .9rem; border-radius: 999px;
+      font-size: .9rem; font-weight: 600;
+    }
+    .badge-gold { background: #fff7ed; color: #b45309; border: 1px solid #fcd34d; }
+    .figure-block { margin: 1.5rem auto 2rem; }
+    .figure-block img { width: 100%; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; display: block; }
+    .figure-block.medium { max-width: 720px; }
+    .figure-block.narrow { max-width: 480px; }
+    .figure-block figcaption { color: #6b7280; font-size: .92rem; margin-top: .6rem; text-align: left; line-height: 1.5; }
+    .section-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; font-weight: 700; color: #b45309; margin-bottom: .25rem; }
+    .author-block.me { font-weight: 700; }
+    .affil { font-size: 1rem; color: #4b5563; }
+    .content p { line-height: 1.75; }
+    .eq { overflow-x: auto; }
+    .content code { font-size: .9em; }
+    .viz { margin: 1.5rem auto 2rem; }
+    .viz canvas { display: block; width: 100%; }
+    .viz-hero { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    @media (max-width: 700px) { .viz-hero { grid-template-columns: repeat(2, 1fr); gap: .75rem; } }
+    .viz-hero-panel canvas { aspect-ratio: 1; }
+    .viz-panels { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; }
+    @media (max-width: 700px) { .viz-panels { grid-template-columns: repeat(2, 1fr); } }
+    .viz-panel canvas { aspect-ratio: 1; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; }
+    .viz-panel-label { color: #374151; font-size: .85rem; margin-top: .3rem; text-align: center; }
+    .viz-rule { max-width: 460px; }
+    .viz-rule canvas { aspect-ratio: 1; background: #fff; border: 1px solid #e5e7eb; cursor: pointer; }
+    .viz-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin-top: .8rem; font-size: .92rem; color: #374151; }
+    .viz-controls label { cursor: pointer; }
+    .viz-btn { background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; color: #1e293b; cursor: pointer; font: inherit; font-size: .9rem; padding: .22rem .65rem; }
+    .viz-btn:hover { background: #f1f5f9; }
+    .viz-readout { color: #374151; font-size: .92rem; line-height: 1.6; margin-top: .6rem; text-align: left; }
+    .viz-note { color: #6b7280; font-size: .92rem; line-height: 1.5; margin-top: .6rem; text-align: left; }
+    .viz-legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; color: #374151; font-size: .85rem; margin-top: .5rem; }
+    .viz-legend i { display: inline-block; width: .8em; height: .8em; margin-right: .3em; border: 1px solid rgba(0,0,0,.15); }
+    .viz-multiway { display: grid; grid-template-columns: 1fr 150px; gap: 1rem; align-items: start; }
+    @media (max-width: 700px) { .viz-multiway { grid-template-columns: 1fr; } }
+    .viz-multiway [data-graph] { height: 420px; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; cursor: pointer; }
+    .viz-multiway [data-state] { aspect-ratio: 1; background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; max-width: 150px; }
+    /* keep the title clear of the fixed More Research button */
+    @media (min-width: 769px) { main > .hero:first-child .hero-body { padding-top: 6rem; } }
+  </style>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Research -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="More research">
+      <i class="fas fa-flask"></i>
+      More Research
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Research</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="works-list">
+        <a href="../radiative-cooling-films/" class="work-item">
+          <div class="work-info">
+            <h5>Enhancing the Transparency–Temperature Trade-Off Through Spectral Engineering and Radiative Cooling</h5>
+            <p>Spectral engineering and passive radiative cooling.</p>
+            <span class="work-venue">Small Science 2026</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="../slot-die-perovskites/" class="work-item">
+          <div class="work-info">
+            <h5>Comprehensive Review on Slot-Die-Based Perovskite Photovoltaics</h5>
+            <p>Mechanisms, Materials, Methods, and Marketability.</p>
+            <span class="work-venue">Advanced Energy Materials</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="../" class="work-item">
+          <div class="work-info">
+            <h5>All research</h5>
+            <p>Every paper in one place.</p>
+            <span class="work-venue">Index</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+  <!-- Title -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">On the Density and Multiway Spectral Theory of Aggregation Systems</h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block me">Thantham Jittham</span>
+            </div>
+
+            <div class="publication-authors affil">
+              <span class="author-block">Mentors: Adam Millar and Lyman Hurd</span>
+              <br><span class="author-block">Advised by Stephen Wolfram</span>
+              <br><span class="author-block" style="margin-top:.5rem;">Wolfram High School Summer Research Program, 2025</span>
+              <br><span class="badge badge-gold"><i class="fas fa-star"></i>&nbsp; Wolfram Community Staff Pick</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://community.wolfram.com/t/wsrp25-on-the-density-and-multiway-spectral-theory-of-aggregation-systems/25762" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-code"></i></span>
+                    <span>Wolfram Community</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://www.researchgate.net/publication/394098780_On_the_Density_and_Multiway_Spectral_Theory_of_Aggregation_Systems" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>ResearchGate</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#BibTeX" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-quote-right"></i></span>
+                    <span>Cite</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <figure class="viz" data-viz="hero" style="margin-top:0;">
+          <img src="static/images/growth-rules.jpg" alt="Four aggregation clusters colored by cell state, one for each of the rules 4: {1}, 4: {1, 2}, 4: {1, 3} and 4: {1, 2, 3}." style="width:100%;display:block;">
+          <div class="viz-hero" data-panels style="display:none;" aria-label="Four aggregation systems growing from a single cross, one for each rule, on a loop."></div>
+          <figcaption class="viz-note">Boundary-colored cellular automata evolutions under all rules \(r \in R \subseteq\) Range[3] containing 1, with a Von Neumann neighborhood, growing to 500 iterations. Each loop is a new random run. Animated for this page, using the essay's rules and colors.</figcaption>
+        </figure>
+        <h2 class="subtitle has-text-centered">
+          Aggregation systems, where new cells get added around a cell following a ruleset related to its neighbors, can be adapted to model a variety of physical and networked processes.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce a computational framework for exhaustive generation of biased cellular-automaton aggregation systems and discuss its influence on structural density. We present a modification of the
+              AggregationSystem resource function which, for any given rule and initial grid, enumerates every possible single-cell update for the generations of a multiway state-space. We then identify terminal
+              states (end-state nodes with no outgoing transitions) and overlay path-highlighting from the origin to each terminal via vertex- and edge-coloring to reveal emergent convergence patterns. These
+              subgraphs are then analyzed via methodology from spectral graph theory, revealing patterns in connectivity, entropy, and other properties of multiway systems. Such analyses of discrete dynamical
+              systems can be adapted to model a variety of physical and networked processes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Introduction -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Introduction</p>
+      <h2 class="title is-3">Growth from simple rules</h2>
+      <p>
+        Cellular Automata (CA) models are representations of evolving systems on a state space where complex structures may emerge from simple local rules. Aggregation systems are a type of cellular automata
+        such that the set of defined rules does not include the removal of previously occupied cells, leading to structures where new cells get added around a cell following a ruleset related to its neighbors.
+      </p>
+      <figure class="figure-block">
+        <img src="static/images/eden.jpg" alt="Three black clusters from the Eden model, growing rounder from 100 to 10,000 iterations." loading="lazy">
+        <figcaption>Row display of the Eden cellular automaton model after 100, 1,000, and 10,000 iterations.</figcaption>
+      </figure>
+      <p>
+        Shown above is the complexity-minimized “Eden model,” where the initial state of the system is one black cell, and for each iteration, a new black cell is randomly added on an unoccupied square vertically
+        or horizontally adjacent to an existing cell. We can also specify the number(s) of neighbors of a cell required for that cell to be eligible for growth. This is referred to as a “totalistically constrained
+        growth.”
+      </p>
+      <figure class="viz viz-rule" data-viz="rule">
+        <canvas aria-label="A grid where you can place cells according to a chosen growth rule."></canvas>
+        <div class="viz-legend">
+          <span><i style="background:#111"></i>alive</span>
+          <span><i style="background:#86c56b"></i>candidate</span>
+          <span><i style="background:#f6d26b"></i>may become a candidate</span>
+          <span><i style="background:#f28a5c"></i>can no longer join</span>
+        </div>
+        <div class="viz-controls">
+          <span>Neighbors allowed:</span>
+          <label><input type="checkbox" value="1"> 1</label>
+          <label><input type="checkbox" value="2" checked> 2</label>
+          <label><input type="checkbox" value="3"> 3</label>
+          <label><input type="checkbox" value="4"> 4</label>
+          <button class="viz-btn" data-auto>Play</button>
+          <button class="viz-btn" data-step-once>Step</button>
+          <button class="viz-btn" data-restart>Restart</button>
+        </div>
+        <div class="viz-readout" data-status></div>
+        <figcaption class="viz-note">Try it: pick a rule and place cells yourself, using the essay's cell colors. Some rules run forever, while others trap themselves in a terminal state. Interactive simulation made for this page.</figcaption>
+      </figure>
+      <p>
+        Multiway systems model every possible path of evolution for a given system, where one state can lead to multiple unique ones. In a multiway system, terminal states are vertices with no outgoing edges.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. Density -->
+  <section class="section has-background-light">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Density</p>
+      <h2 class="title is-3">Randomness in bounded growth</h2>
+      <p>
+        We define a boundary limit of growth as a two-dimensional quadrilateral grid where there initially exists a starting cell or “nucleation site” of an aggregation system. Said cell then sequentially evolves
+        into an emergent structure of occupied cells whose density is formally calculated as the ratio of occupied cells over the total area, providing a metric for comparative analysis of discrete aggregation
+        behaviors across varied conditions and parameters.
+      </p>
+      <figure class="figure-block medium">
+        <img src="static/images/density-seeds.jpg" alt="Density against boundary limit for seeds 1 to 20. The curves vary early, then settle into a narrow band." loading="lazy">
+        <figcaption>Density (\(\rho\)) of a discrete aggregation structure as its boundary limit (\(\ell\)) increases, across boundary limits from 1 to 20 for twenty seeds.</figcaption>
+      </figure>
+      <p>
+        The variability introduced by randomness is represented by different colored curves corresponding to each seed. Despite a noticeable initial trend, the average values of these seeds converge toward a single
+        value, showing an unpredictability and lack of long-term density trend.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. Bias -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Bias</p>
+      <h2 class="title is-3">Weighted growth</h2>
+      <p>
+        We also define functions for aggregation system CA generation such that a bias is implemented via a “weighting” rule in accordance to the number of neighbors an empty candidate cell has. The integer values
+        of the number of neighbors for a given candidate cell is mapped onto the weight property of the RandomChoice function. For instance, an unoccupied cell with three neighbors will be three times more likely to
+        be chosen for placement when compared to another with one neighbor.
+      </p>
+      <figure class="figure-block narrow">
+        <img src="static/images/weight-shading.jpg" alt="An aggregation cluster in black, with each empty cell in a shade of gray set by its number of neighbors." loading="lazy">
+        <figcaption>We may also represent this neighbor-intensity for each empty cell as different shades of the grayscale.</figcaption>
+      </figure>
+      <p>
+        Further bias via weighting can be done by applying exponents to each of the number of neighbors, thereby creating a larger gap between each numerator and more favorably biases cells with more neighbors. To
+        compare the densities between non-, linear-, and exponential-biased aggregation plots, aggregation systems of seeds 1 through 50 were run until they fulfill a boundary of 20 cells.
+      </p>
+      <figure class="viz" data-viz="bias">
+        <div class="viz-panels" data-panels></div>
+        <div class="viz-controls"><button class="viz-btn" data-restart>Grow again</button></div>
+        <figcaption class="viz-note">One live run of each bias type, using the essay's weighting, up to a boundary of 40 cells. \(\rho\) is the density inside each cluster's bounding box, and it varies from run to run. Interactive simulation made for this page; the essay's measured results over 50 seeds are in the plots below.</figcaption>
+      </figure>
+      <figure class="figure-block">
+        <img src="static/images/bias-comparison.jpg" alt="Density against boundary size for unbiased, linear and exponential bias runs, with a final panel comparing their averages." loading="lazy">
+        <figcaption>The boundary size–density graphs for the five types of aggregation system generations.</figcaption>
+      </figure>
+      <p>
+        As the bound size increases, there is a clear trend where the average density value of the greatest-value exponential-biased aggregation approaches the greatest value, followed by the linear- and non-biased
+        aggregations, respectively. This is directly related to the tendency of the bias to keep adding to existing clusters on the aggregation plots. Notice an interesting pattern that emerges once the exponential bias factor reaches greater
+        numbers. As the boundary size reaches beyond approximately 10 cells, the 8th power exponential bias returned lower average density values than the 4th exponential bias.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. Multiway -->
+  <section class="section has-background-light">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Multiway graphs</p>
+      <h2 class="title is-3">Finding terminal states</h2>
+      <p>
+        We take a known terminal state found at the ninth iteration of the 8-neighbor rule {2} aggregation multiway system. Examining a part of the multiway system more closely, we see that there exists a state at the
+        end of the highlighted graph path that restricts any further growth. As the rules require exactly two neighbors for another cell to be placed and there is no cell that fulfills this requirement, the set of
+        candidate cells is empty, and this branch of the multiway system is terminated, hence a terminal state.
+      </p>
+      <figure class="viz" data-viz="multiway">
+        <div class="viz-multiway">
+          <canvas data-graph aria-label="The multiway graph of the 8-neighbor rule {2}, growing one iteration at a time."></canvas>
+          <div>
+            <canvas data-state aria-label="The state at the selected vertex."></canvas>
+            <div class="viz-readout" data-detail></div>
+          </div>
+        </div>
+        <div class="viz-controls">
+          <button class="viz-btn" data-play>Play</button>
+          <label>Iteration <input type="range" min="2" max="10" step="1" value="2"></label>
+        </div>
+        <div class="viz-readout" data-status></div>
+        <figcaption class="viz-note">The multiway graph of the same rule, recomputed live from the essay's starting cells, with states merged up to rotation and reflection. Terminal states are red. Click any point to trace every path that reaches it and see its state. Interactive simulation made for this page.</figcaption>
+      </figure>
+      <figure class="figure-block medium">
+        <img src="static/images/terminal-path.jpg" alt="Part of a multiway graph whose vertices are small grids, with the paths leading to one terminal state highlighted in red." loading="lazy">
+        <figcaption>Part of the multiway system of the 8-neighbor rule {2}, with the paths to the terminal state highlighted.</figcaption>
+      </figure>
+      <p>
+        This terminal state is quite rare in our multiway system. Taking the ratio of all possible paths in the extracted subgraph to that of the multiway system yields a probability of ~1.5% of reaching this state.
+        This means that there is quite a weak notion of confluence seen from the lack of convergence towards a certain state.
+      </p>
+      <figure class="figure-block medium">
+        <img src="static/images/terminal-candidates.jpg" alt="A large tangled multiway graph in blue, with terminal candidate vertices marked in red." loading="lazy">
+        <figcaption>The rule {2} aggregation system at ten iterations, with all possible terminal states in the multiway system highlighted.</figcaption>
+      </figure>
+      <p>
+        Examining every path toward all the terminal candidates, we find that vertex 316 occurs at the ninth iteration, proving to be our previously known terminal state. This section of the terminal identification
+        process demonstrates the possibility to “work backwards,” or in other words, post-generation, toward any terminal state in a multiway system.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. Spectral -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Spectral graph theory</p>
+      <h2 class="title is-3">Connectivity and entropy</h2>
+      <p>
+        Spectral graph theory provides a continuous lens on the discrete dynamics of the aggregation process, capturing global features like connectivity, growth complexity, and entropy. The algebraic connectivity is
+        defined as the second-smallest eigenvalue \(\lambda_2\) of the (combinatorial) Laplacian \(L = D - A\) of an undirected graph. Equivalently, by the Courant–Fischer theorem,
+      </p>
+      <div class="eq">
+        \[ \alpha(G) = \min_{\substack{x \in \mathbb{R}^n \\ x \perp \mathbf{1}}} \frac{x^T L\, x}{x^T x} \]
+      </div>
+      <p>
+        Spectral entropy measures the spread or disorder of a graph’s spectrum. Given the eigenvalues \(\{\mu_i\}\) of a chosen matrix (e.g. the normalized Laplacian), form a probability distribution
+        \(p_i = \mu_i / \sum_j \mu_j\), then compute
+      </p>
+      <div class="eq">
+        \[ H = -\sum_i p_i \log p_i \]
+      </div>
+      <p>
+        High \(H\) indicates a rich and complex mix of frequencies (structural irregularity), while low \(H\) reflects a more uniform or symmetric spectrum.
+      </p>
+      <figure class="figure-block medium">
+        <img src="static/images/terminal-states.jpg" alt="A grid of 42 small aggregation clusters in black, surrounded by orange and yellow cells." loading="lazy">
+        <figcaption>Structural and spectral characteristics of terminal states.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths content">
+          <h2 class="title is-3 has-text-centered">Conclusions</h2>
+          <p class="has-text-justified">
+            This project demonstrated how different bias mechanisms: unbiased, linear, and exponential, affect the density evolution of aggregation systems over time. These results highlight the sensitivity of the system
+            to local attachment preferences and suggest that tunable bias could serve as a controllable parameter for steering emergent material properties in simulated or real-world self-assembly processes. In addition
+            to structural analysis, this work demonstrated how multiway systems can be used to model the dynamics of aggregation processes, revealing the rich combinatorial and geometric structures that emerge from simple
+            local rules.
+          </p>
+          <p class="has-text-justified">
+            Looking ahead, the same approaches and methods can be scaled to larger lattices, higher dimensions, or more intricate rule sets, making it a versatile platform for the study of diverse discrete dynamical systems.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Acknowledgements -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-4">Acknowledgements</h2>
+      <p>
+        This work would not have been possible without the guidance and insight of my mentor Adam Millar through every stage of the project. I am grateful to the other mentors and teaching assistants of the Wolfram Summer
+        Research Program who aided me during this project, including, in no particular order; Lyman Hurd, Jason Sonnenberg, Anoushka Munchhal, and William Choi-Kim, all of whom provided kind assistance and thoughtful
+        discussions throughout the process. I sincerely thank the program directors for providing all research scholars with this invaluable opportunity. Finally, I extend my appreciation to Stephen Wolfram whose
+        foundational work and vision made this project possible.
+      </p>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@misc{jittham2025aggregation,
+  title        = {On the Density and Multiway Spectral Theory of Aggregation Systems},
+  author       = {Jittham, Thantham},
+  year         = {2025},
+  howpublished = {Wolfram Community, Wolfram High School Summer Research Program},
+  url          = {https://community.wolfram.com/t/wsrp25-on-the-density-and-multiway-spectral-theory-of-aggregation-systems/25762}
+}</code></pre>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Text and figures are from T. Jittham, “On the Density and Multiway Spectral Theory of Aggregation Systems,” Wolfram High School Summer Research Program, 2025. Text is excerpted and lightly condensed.
+            </p>
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>, which was adapted from the
+              <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page, and is licensed under a
+              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

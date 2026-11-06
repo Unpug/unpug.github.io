@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Enhancing the Transparency–Temperature Trade-Off Through Spectral Engineering and Radiative Cooling | Small Science</title>
+  <meta name="description" content="A scalable multilayer greenhouse film that mitigates daytime heat stress through spectral management of solar radiation combined with radiative cooling. Small Science 2026, 6, e70311.">
+  <meta name="keywords" content="greenhouse thermal management, passive daytime radiative cooling, spectral engineering, TiO2–PET multilayer films, transparency–cooling trade-off">
+  <meta name="author" content="Pharit Gridtayawong, Taweesak Kaewmanee, Wachara Benchaphanthawee, Varakorn Phiriyasas, Chattrarat Ponghiransmith, Worawut Rueangsawang, Chaowaphat Seriwattanachai, Patawee Sakata, Napong Tangwiroon, Thantham Jittham, Napan Phuphathanaphong, Phatratorn Wonganannont, Tansuda Pinpapat, Tanant Waritanant, Tatpong Tulyananda, Pongsakorn Kanjanaboos">
+
+  <!-- Social previews -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Enhancing the Transparency–Temperature Trade-Off Through Spectral Engineering and Radiative Cooling">
+  <meta property="og:description" content="A scalable multilayer greenhouse film for passive cooling in hot climates. Small Science 2026.">
+  <meta property="og:url" content="https://unpug.github.io/research/radiative-cooling-films/">
+  <meta property="og:image" content="https://unpug.github.io/research/radiative-cooling-films/static/images/social_preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Google Scholar -->
+  <meta name="citation_title" content="Enhancing the Transparency–Temperature Trade-Off Through Spectral Engineering and Radiative Cooling">
+  <meta name="citation_author" content="Gridtayawong, Pharit">
+  <meta name="citation_author" content="Kaewmanee, Taweesak">
+  <meta name="citation_author" content="Benchaphanthawee, Wachara">
+  <meta name="citation_author" content="Phiriyasas, Varakorn">
+  <meta name="citation_author" content="Ponghiransmith, Chattrarat">
+  <meta name="citation_author" content="Rueangsawang, Worawut">
+  <meta name="citation_author" content="Seriwattanachai, Chaowaphat">
+  <meta name="citation_author" content="Sakata, Patawee">
+  <meta name="citation_author" content="Tangwiroon, Napong">
+  <meta name="citation_author" content="Jittham, Thantham">
+  <meta name="citation_author" content="Phuphathanaphong, Napan">
+  <meta name="citation_author" content="Wonganannont, Phatratorn">
+  <meta name="citation_author" content="Pinpapat, Tansuda">
+  <meta name="citation_author" content="Waritanant, Tanant">
+  <meta name="citation_author" content="Tulyananda, Tatpong">
+  <meta name="citation_author" content="Kanjanaboos, Pongsakorn">
+  <meta name="citation_journal_title" content="Small Science">
+  <meta name="citation_volume" content="6">
+  <meta name="citation_firstpage" content="e70311">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_doi" content="10.1002/smsc.70311">
+
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] } };</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    .badge {
+      display: inline-block; margin: .75rem .25rem 0; padding: .3rem .9rem; border-radius: 999px;
+      font-size: .9rem; font-weight: 600;
+    }
+    .badge-oa { background: #f0fdf4; color: #15803d; border: 1px solid #86efac; }
+    .figure-block { margin: 1.5rem auto 2rem; }
+    .figure-block img { width: 100%; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; }
+    .figure-block.medium { max-width: 760px; }
+    .figure-block figcaption { color: #6b7280; font-size: .92rem; margin-top: .6rem; text-align: left; line-height: 1.5; }
+    .figure-block figcaption b { color: #374151; }
+    .section-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; font-weight: 700; color: #b45309; margin-bottom: .25rem; }
+    .author-block.me { font-weight: 700; }
+    .affil { font-size: 1rem; color: #4b5563; }
+    .content p { line-height: 1.75; }
+    blockquote.contrib { border-left: 4px solid #f59e0b; background: #fffbeb; }
+    .eq { overflow-x: auto; }
+    .publication-title { font-size: 2.6rem !important; }
+    @media (max-width: 768px) { .publication-title { font-size: 2rem !important; } }
+    /* keep the long title clear of the fixed More Research button */
+    @media (min-width: 769px) { main > .hero:first-child .hero-body { padding-top: 6rem; } }
+  </style>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Research -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="More research">
+      <i class="fas fa-flask"></i>
+      More Research
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Research</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="works-list">
+        <a href="../slot-die-perovskites/" class="work-item">
+          <div class="work-info">
+            <h5>Comprehensive Review on Slot-Die-Based Perovskite Photovoltaics</h5>
+            <p>Mechanisms, Materials, Methods, and Marketability.</p>
+            <span class="work-venue">Advanced Energy Materials</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="https://community.wolfram.com/t/wsrp25-on-the-density-and-multiway-spectral-theory-of-aggregation-systems/25762" target="_blank" rel="noopener" class="work-item">
+          <div class="work-info">
+            <h5>On the Density and Multiway Spectral Theory of Aggregation Systems</h5>
+            <p>Computational essay; staff pick.</p>
+            <span class="work-venue">Wolfram Summer Research Program 2025</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="../" class="work-item">
+          <div class="work-info">
+            <h5>All research</h5>
+            <p>Every paper in one place.</p>
+            <span class="work-venue">Index</span>
+          </div>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+
+  <!-- Title -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Enhancing the Transparency–Temperature Trade-Off Through Spectral Engineering and Radiative Cooling</h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Pharit Gridtayawong,</span>
+              <span class="author-block">Taweesak Kaewmanee,</span>
+              <span class="author-block">Wachara Benchaphanthawee,</span>
+              <span class="author-block">Varakorn Phiriyasas,</span>
+              <span class="author-block">Chattrarat Ponghiransmith,</span>
+              <span class="author-block">Worawut Rueangsawang,</span>
+              <span class="author-block">Chaowaphat Seriwattanachai,</span>
+              <span class="author-block">Patawee Sakata,</span>
+              <span class="author-block">Napong Tangwiroon,</span>
+              <span class="author-block me">Thantham Jittham,</span>
+              <span class="author-block">Napan Phuphathanaphong,</span>
+              <span class="author-block">Phatratorn Wonganannont,</span>
+              <span class="author-block">Tansuda Pinpapat,</span>
+              <span class="author-block">Tanant Waritanant,</span>
+              <span class="author-block">Tatpong Tulyananda,</span>
+              <span class="author-block">Pongsakorn Kanjanaboos<sup>*</sup></span>
+            </div>
+
+            <div class="publication-authors affil">
+              <span class="author-block">Mahidol University, Nakhon Pathom, Thailand</span>
+              <br><span class="author-block" style="margin-top:.5rem;"><b>Small Science</b> 2026, 6, e70311</span>
+              <br><span class="badge badge-oa"><i class="fas fa-lock-open"></i>&nbsp; Open access</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://doi.org/10.1002/smsc.70311" target="_blank" rel="noopener" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#BibTeX" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-quote-right"></i></span>
+                    <span>Cite</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <figure class="figure-block" style="margin-top:0;">
+          <img src="static/images/fig1-design.jpg" alt="Dual-film greenhouse strategy, the multilayer film structure, an SEM cross-section with titanium map, photographs of the two film variants, and tensile strength compared to commercial covers.">
+          <figcaption><b>Figure 1.</b> (a) Schematic illustration of a dual-variant film strategy, resolving the trade-off between PAR transmission and solar heat gain, (b) the construction of the multilayer
+            film comprising a UV–IR selective filtering layer laminated on top of a TiO<sub>2</sub>–PET scattering base layer, where the UV–IR layer is the sky-facing side of the structure, (c) cross-sectional
+            SEM image with corresponding energy-dispersive X-ray (EDX) elemental map to confirm the TiO<sub>2</sub> dispersion within the PET matrix, (d) snapshot of two developed TiO<sub>2</sub>–PET/UV–IR
+            greenhouse film variants at identical dimensions (10 × 10 cm), and (e) the plots of mechanical tensile strength of developed films compared to commercial greenhouse covers such as LDPE and DCF.</figcaption>
+        </figure>
+        <h2 class="subtitle has-text-centered">
+          A scalable polymer-based greenhouse film that mitigates daytime heat stress in tropical climates by reframing greenhouse cooling as a problem of spectral energy management rather than maximal optical transparency.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Excess solar heat gain limits greenhouse productivity in tropical climates, where conventional polymer covers accumulate thermal energy and allow near-infrared (NIR) transmission.
+              Here, we demonstrate a scalable multilayer greenhouse film that mitigates daytime heat stress through spectral management of solar radiation combined with radiative cooling.
+              A TiO<sub>2</sub>-embedded polyethylene terephthalate (PET) scattering layer is laminated with ultraviolet (UV)–IR selective films to prevent excess heat while allowing appropriate
+              photosynthetically active radiation (PAR) transmission. Two configurations are designed to address crop-dependent light requirements: a higher-transmittance film (~57% PAR) and a stronger
+              heat-rejection film (~37% PAR). The multilayer structures suppress NIR transmission (up to 80–92% rejection), reduce UV exposure, and exhibit near-unity emissivity within the 8–13 μm
+              atmospheric window (\(\bar{\varepsilon} \approx 0.99\)), enabling efficient radiative heat dissipation. Outdoor rooftop measurements under tropical sunlight demonstrate consistent daytime
+              temperature reductions of 3–5°C compared with those of commercial greenhouse films; the PET-based laminate also provides high mechanical robustness (69–92 MPa tensile strength).
+              These results establish spectral engineering as a practical strategy to manage the transparency–cooling trade-off for passive greenhouse cooling in hot climates.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Introduction -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Introduction</p>
+      <h2 class="title is-3">Heat stress in greenhouses</h2>
+      <p>
+        Excessive solar heat gain in greenhouses operating in hot climates elevates plant respiration, suppresses photosynthesis, and increases water loss, driving heavy reliance on energy- and
+        water-intensive ventilation, cooling, and irrigation strategies. Among these strategies, shade nets are widely used to prevent greenhouse heat stress by reducing photosynthetically active
+        radiation (PAR, 400–700 nm). However, their largely uniform attenuation reduces light intensity without spectral or angular control, often leading to suboptimal illumination at the plant canopy
+        and lower photosynthetic efficiency.
+      </p>
+      <p>
+        Radiative cooling enables passive heat dissipation to outer space through the mid-infrared (MIR; 8–13 μm) atmospheric transparency window. Passive daytime radiative cooling (PDRC) extends this concept by combining high solar reflectance with strong MIR emissivity, allowing subambient cooling even under direct sunlight. In greenhouse applications, an ideal PDRC film would
+        transmit PAR for plant growth while rejecting near-infrared (NIR) solar heat and efficiently radiating internal thermal energy.
+      </p>
+      <p>
+        Under high solar irradiance, reduction of PAR is unavoidable; this work demonstrates how that reduction can be engineered to suppress solar thermal load while preserving biologically effective
+        illumination. Instead of uniformly attenuating sunlight through shading, the proposed approach redistributes incoming solar energy spectrally and angularly within a single, mechanically robust film.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2. Design -->
+  <section class="section has-background-light">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Design</p>
+      <h2 class="title is-3">One laminate, three functions</h2>
+      <p>The proposed TiO<sub>2</sub>–PET/UV–IR laminate integrates three key functions:</p>
+      <ul>
+        <li>diffuse transmission of PAR,</li>
+        <li>selective suppression of heat-driving spectral bands (UV–NIR), and</li>
+        <li>near-unity emissivity in the MIR atmospheric window for radiative heat dissipation.</li>
+      </ul>
+      <p>
+        To address crop-dependent tolerance to PAR reduction, two film variants are intentionally designed: a higher-transmittance configuration targeting light-demanding crops and a lower-transmittance
+        configuration prioritizing thermal relief for heat-sensitive crops. UV–IR 70 provides higher visible transmittance suitable for light-demanding crops, whereas UV–IR 45 offers stronger NIR
+        suppression and moderated PAR transmission appropriate for heat-sensitive and shade-tolerant crops.
+      </p>
+      <p>
+        Commercial-grade PET pellets were used as the polymer matrix. Titanium dioxide (TiO<sub>2</sub>, rutile phase) was incorporated as the filler. The dried pellets were processed using a single-screw extruder to produce composite sheets with an average thickness of 70 μm. To impart spectral selectivity, a commercial UV–IR-cut window film
+        (automotive grade) was laminated onto the TiO<sub>2</sub>–PET surface without thermal bonding.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. Optics -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Spectral engineering</p>
+      <h2 class="title is-3">From the solar band to the mid-infrared</h2>
+      <p>
+        Rather than maximizing optical transparency, PAR reduction is treated here as an intentional control variable for thermal regulation under high solar irradiance. Pristine PET exhibits high
+        broadband transparency, transmitting 87.9% of PAR; however, this high transparency is accompanied by substantial NIR transmission, which directly contributes to solar thermal loading.
+        Introducing a low TiO<sub>2</sub> loading into PET reduces PAR transmittance to 76.1%, primarily due to wavelength-dependent Mie scattering arising from the refractive-index contrast between
+        rutile TiO<sub>2</sub> particles and the PET matrix.
+      </p>
+      <p>
+        These results show that absorption- and reflection-dominant thermal management strategies can be selectively combined through multilayer spectral engineering. The TiO<sub>2</sub>–PET/UV–IR 70
+        and TiO<sub>2</sub>–PET/UV–IR 45 stacks reach blackbody-weighted emissivity of \(\bar{\varepsilon} \approx 0.99\) for both samples. By comparison, commercial LDPE and DCFs exhibit considerably
+        lower MIR emissivities (\(\bar{\varepsilon} \approx 0.73\) and \(\bar{\varepsilon} \approx 0.81\), respectively), highlighting their limited capacity for radiative cooling despite widespread use
+        in greenhouse applications.
+      </p>
+      <figure class="figure-block medium">
+        <img src="static/images/fig2-spectra.jpg" alt="Transmittance, PAR, reflectance and mid-infrared emissivity of the films, with atmospheric transparency." loading="lazy">
+        <figcaption><b>Figure 2.</b> (a) UV–Vis–NIR and (b) PAR transmittance spectra of films in this work, (c) solar reflectance spectra in range of 0.3–2.5 μm of films in this work, and
+          (d) blackbody-weighted mid-infrared emissivity and (e) spectral emissivity with atmospheric transparency in the range of 8–13 μm.</figcaption>
+      </figure>
+      <p>The blackbody-weighted average emissivity over the atmospheric transparency window (8–13 μm) is defined as:</p>
+      <div class="eq">
+        \[ \bar{\varepsilon}_{8-13\,\mu\mathrm{m}}(T) = \frac{\int_{8\,\mu\mathrm{m}}^{13\,\mu\mathrm{m}} \varepsilon(\lambda)\, I_{BB}(\lambda, T)\, d\lambda}{\int_{8\,\mu\mathrm{m}}^{13\,\mu\mathrm{m}} I_{BB}(\lambda, T)\, d\lambda} \]
+      </div>
+      <p>where \(I_{BB}(\lambda, T)\) is the spectral radiance of a blackbody at temperature \(T\) (taken as 300 K in this study).</p>
+    </div>
+  </section>
+
+  <!-- 4. Outdoor -->
+  <section class="section has-background-light">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Outdoor cooling</p>
+      <h2 class="title is-3">Rooftop measurements</h2>
+      <p>
+        Outdoor rooftop measurements were conducted at the Faculty of Science, Mahidol University, Nakhon Pathom, Thailand, under clear-sky conditions on 19th July, 24th July, and 2nd August 2025 between
+        11:00 and 14:00 local time, to evaluate the thermal performance of the proposed films under realistic tropical solar conditions. The strongest cooling performance is achieved by the
+        TiO<sub>2</sub>–PET/UV–IR multilayer films, demonstrating the synergistic effect of combining controlled scattering with selective solar-band rejection.
+      </p>
+      <p>
+        Relative to LDPE and DCFs, progressively stronger cooling is observed from TiO<sub>2</sub>–PET to the TiO<sub>2</sub>–PET/UV–IR multilayer films, with the TiO<sub>2</sub>–PET/UV–IR 45
+        configuration achieving the largest temperature reductions (up to 5–6°C, depending on the reference baseline) while maintaining a moderate PAR transmittance of 37%.
+      </p>
+      <figure class="figure-block medium">
+        <img src="static/images/fig3-outdoor.jpg" alt="Insulated test box, rooftop setup, temperature profiles and temperature reductions of the films against LDPE and DCF." loading="lazy">
+        <figcaption><b>Figure 3.</b> (a) Construction of the insulated test box; film samples were sealed over the top opening of an aluminum-lined foam box. (b) Photographs of the outdoor experimental setup
+          under clear-sky conditions. (c) Time-resolved temperature profiles between 11:00 and 14:00 (local time) with solar irradiance and ambient humidity of films under clear-sky conditions on 19th July 2025.
+          (d) Statistical temperature distribution of films on 19th July 2025. (e) Temperature reduction (ΔT) of the developed films compared to LDPE, measured on 2nd August 2025 under comparable outdoor
+          conditions. (f) Temperature reduction (ΔT) of the developed films compared to diffuse IR-cut commercial greenhouse film (DCF), measured on 24th July 2025 under comparable outdoor conditions.</figcaption>
+      </figure>
+      <p>
+        TiO<sub>2</sub>–PET/UV–IR 45 maintains a PAR transmittance of 37% while suppressing NIR transmission to 19.8% (80.2% rejection) and reducing UV transmission to 7.1%. Similarly,
+        TiO<sub>2</sub>–PET/UV–IR 70 retains 57.3% PAR while blocking 91.8% of NIR and transmitting only 2.7% UV. Conventional shade nets reduce all wavelengths equally. In contrast, the spectrally
+        engineered films keep PAR while removing heat-carrying radiation and enhancing mid-IR emission, allowing more radiative cooling.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. Greenhouse -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <p class="section-kicker">Validation</p>
+      <h2 class="title is-3">Small-scale greenhouses</h2>
+      <p>
+        To assess practical performance, outdoor experiments were conducted using identical polyvinyl chloride (PVC)-framed greenhouse units with the covering material as the only variable. Plant
+        canopy-level temperature (i.e., at the height of the plant leaves) was selected as the primary metric, as it directly reflects the thermal environment experienced by plants. Relative to LDPE,
+        TiO<sub>2</sub>–PET/UV–IR 45 reduces the canopy temperature by ~5.1°C.
+      </p>
+      <figure class="figure-block">
+        <img src="static/images/fig4-greenhouse.jpg" alt="Greenhouse test units on a rooftop, temperature profiles, temperature distributions and normalized transmitted irradiance." loading="lazy">
+        <figcaption><b>Figure 4.</b> (a) Snapshot of the greenhouse units used for outdoor testing. (b) Temperature profiles between 11:00 and 14:00 with solar irradiance and ambient humidity of films under
+          clear-sky conditions during the hot season of Thailand (April, 2026). (c) Statistical distribution of temperature between 11:00 and 14:00. (d) Normalized transmitted irradiance for each configuration.</figcaption>
+      </figure>
+      <p>
+        Despite similar transmitted irradiance levels, TiO<sub>2</sub>–PET/UV–IR 45 maintains a substantially lower canopy temperature. UV/NIR blocking enables more effective thermal regulation per unit of
+        transmitted irradiance compared to conventional shading, highlighting the advantage of selective spectral management over broadband attenuation strategies.
+      </p>
+      <p>
+        Mechanical testing shows that the TiO<sub>2</sub>–PET-based films exhibit tensile strengths of 69–92 MPa, significantly exceeding those of conventional LDPE (17 MPa) and DCFs (16 MPa), showing the
+        potential to serve as a durable primary greenhouse covering under harsh outdoor conditions.
+      </p>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths content">
+          <h2 class="title is-3 has-text-centered">Conclusion</h2>
+          <p class="has-text-justified">
+            This work demonstrates that effective greenhouse cooling in tropical climates can be achieved by managing, rather than avoiding, the transparency–cooling trade-off. Rather than uniformly blocking
+            light, cooling is realized by combining diffuse PAR transmission, NIR heat/UV rejection, and high MIR emissivity to enable continuous radiative heat dissipation. In the future, spectral-selective
+            greenhouse covers may enable climate-adaptive cultivation in hot regions, reducing cooling energy demand while maintaining crop productivity, and offering a passive pathway toward resilient and
+            low-carbon food production.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- My contribution -->
+  <section class="section">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-4">My contributions</h2>
+      <p>From the paper's author contributions statement:</p>
+      <blockquote class="contrib">Thantham Jittham: investigation.</blockquote>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{gridtayawong2026transparency,
+  title   = {Enhancing the Transparency--Temperature Trade-Off Through Spectral Engineering and Radiative Cooling},
+  author  = {Gridtayawong, Pharit and Kaewmanee, Taweesak and Benchaphanthawee, Wachara and Phiriyasas, Varakorn and Ponghiransmith, Chattrarat and Rueangsawang, Worawut and Seriwattanachai, Chaowaphat and Sakata, Patawee and Tangwiroon, Napong and Jittham, Thantham and Phuphathanaphong, Napan and Wonganannont, Phatratorn and Pinpapat, Tansuda and Waritanant, Tanant and Tulyananda, Tatpong and Kanjanaboos, Pongsakorn},
+  journal = {Small Science},
+  volume  = {6},
+  pages   = {e70311},
+  year    = {2026},
+  doi     = {10.1002/smsc.70311}
+}</code></pre>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Text and figures are reproduced from P. Gridtayawong et al., <i>Small Science</i> 2026, 6, e70311
+              (<a href="https://doi.org/10.1002/smsc.70311" target="_blank" rel="noopener">doi:10.1002/smsc.70311</a>), © 2026 The Author(s), published by Wiley-VCH GmbH under the
+              <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Creative Commons Attribution License</a>. Text is excerpted and lightly condensed; figure captions are abridged.
+            </p>
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>, which was adapted from the
+              <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page, and is licensed under a
+              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
