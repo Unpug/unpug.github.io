@@ -1,0 +1,55 @@
+/* The Current page: long sections with large figures that simply scroll past. */
+body.current { font-weight: 400; }
+body.current #site { display: block; pointer-events: auto; }
+body.current .wrapper { width: 100%; max-width: 1320px; margin: 0 auto; padding: 64px 32px 0; }
+body.current nav { flex-shrink: 0; position: sticky; top: 64px; align-self: flex-start; font-weight: 700; }
+body.current .content { flex: 1; width: auto; min-width: 0; }
+
+.opening { padding: 8vh 0 28px; }
+.opening h1 { font-size: 92px; font-weight: 400; line-height: 1; letter-spacing: -.01em; margin: 0 0 14px; }
+.tagline { font-size: 22px; color: #57534e; margin: 0; }
+
+.fig { margin: 0; }
+/* The slight lift turns the encoder's near-white blotches back into the page's pure white. */
+.fig video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #fff; filter: brightness(1.025); }
+.fig figcaption { color: #78716c; font-size: 16px; line-height: 1.45; margin-top: 12px; }
+
+.intro { max-width: 660px; padding: 8vh 0 2vh; font-size: 26px; line-height: 1.35; }
+.intro p { margin: 0 0 20px; }
+
+.chapter { padding: 12vh 0 0; }
+.num { color: #b45309; font-size: 22px; font-variant-numeric: lining-nums; margin: 0 0 2px; }
+.chapter h2 { font-size: 46px; font-weight: 400; line-height: 1.1; margin: 0 0 24px; }
+.prose { max-width: 620px; font-size: 21px; line-height: 1.45; margin-bottom: 32px; }
+.prose p { margin: 0 0 16px; }
+.fig + .prose { margin: 36px 0 0; }
+
+.pair-labels { display: grid; grid-template-columns: 1fr 1fr; color: #1c1917; font-size: 17px; margin-top: 8px; text-align: center; }
+.pair-labels b, .quad-labels b { font-weight: 700; font-variant-numeric: lining-nums; }
+.stage { position: relative; }
+.quad-labels { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; color: #1c1917; font-size: 17px; font-variant-numeric: lining-nums; pointer-events: none; }
+.quad-labels span { align-self: end; justify-self: start; background: rgba(255, 255, 255, .88); margin-bottom: 6px; padding: 0 6px 0 2px; }
+
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; list-style: none; margin: 16px 0 0; padding: 0; }
+.steps li { border-top: 2px solid #e7e5e4; color: #a8a29e; font-size: 16px; line-height: 1.35; padding-top: 8px; transition: color .3s ease, border-color .3s ease; }
+.steps li b { display: block; font-size: 20px; font-weight: 700; }
+.steps li.on { border-color: #b45309; color: #1c1917; }
+
+.closing { padding: 14vh 0 18vh; }
+.closing p { max-width: 720px; font-size: 34px; line-height: 1.25; margin: 0 0 24px; }
+.closing .fine { color: #78716c; font-size: 16px; line-height: 1.45; }
+
+@media (max-width: 900px) {
+  body.current .wrapper { flex-direction: column; padding: 32px 20px 0; }
+  body.current nav { position: static; width: auto; padding-right: 0; flex-direction: row; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 8px; }
+  .opening { padding: 5vh 0 18px; }
+  .opening h1 { font-size: 64px; }
+  .tagline { font-size: 19px; }
+  .quad-labels { font-size: 14px; }
+  .intro { font-size: 22px; }
+  .chapter { padding-top: 9vh; }
+  .chapter h2 { font-size: 36px; }
+  .prose { font-size: 19px; }
+  .steps { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .closing p { font-size: 27px; }
+}

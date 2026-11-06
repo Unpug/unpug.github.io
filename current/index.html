@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Current | Thantham (AJ) Jittham</title>
+  <meta name="description" content="Sparse: spatial AI for robotics. Point clouds, voxelization, and drones that map industrial work.">
+  <script src="../assets/nav-transition.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/site.css">
+  <link rel="stylesheet" href="current.css">
+</head>
+<body class="current">
+
+<div id="mc-grid"></div>
+<div id="mole-wrap"><canvas id="mole-canvas"></canvas></div>
+<div id="conway-veil"></div>
+<div id="back-btn">&#8592; Back</div>
+<div id="quote-overlay">
+  <p class="quote-text">"You don't educate people by telling them useful things; you educate people by telling them interesting things"</p>
+  <p class="quote-attr">— John Conway</p>
+</div>
+
+<div id="site">
+  <div class="wrapper">
+    <nav>
+      <a href="../">About</a>
+      <a href="./">Current</a>
+      <a href="../love/">Love</a>
+      <a href="../research/">Research</a>
+      <div class="contact-wrap">
+        <div class="contact-label">Contact <span class="contact-arrow">›</span></div>
+        <div class="contact-dropdown">
+          <a href="https://linkedin.com/in/thantham" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Unpug" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://scholar.google.com/citations?user=dnCTqXYAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a>
+          <a href="mailto:thantham61@gmail.com" target="_blank">Email</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="page active" id="current">
+
+        <header class="opening">
+          <h1>sparse</h1>
+          <p class="tagline">spatial ai for robotics. summer 2026 at <a class="ref" href="https://f.inc/" target="_blank" rel="noopener">founders, inc.</a></p>
+        </header>
+
+        <figure class="fig fig-hero" data-fig="hero">
+          <video src="media/hero.mp4" poster="media/hero.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="A simulated factory floor, turning from a cloud of points into solid voxels as a line sweeps across it."></video>
+        </figure>
+
+        <section class="intro">
+          <p>a robot doesn't work from a picture. it works in space. it has to know where the floor ends, how far the shelf is, and what is moving.</p>
+          <p>sparse starts there. we take the messy 3d data that sensors capture and turn it into a structured map of a place. then drones go out and build those maps where work actually happens.</p>
+        </section>
+
+        <section class="chapter">
+          <p class="num">1</p>
+          <h2>point clouds</h2>
+          <div class="prose">
+            <p>a depth sensor measures distance along thousands of rays. each ray that hits something leaves one point: a position in space, usually with a color. millions of them together make a point cloud.</p>
+            <p>it's the closest thing to what a robot's sensors actually see. look at the shadows behind each object: no ray reached there, so as far as the data goes, nothing is there.</p>
+          </div>
+          <figure class="fig fig-wide" data-fig="scan">
+            <video src="media/scan.mp4" poster="media/scan.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="A single sensor scanning a factory, leaving points where its rays land and empty shadows behind objects."></video>
+            <figcaption>one sensor, one position. every point here comes from a ray traced through the simulated scene.</figcaption>
+          </figure>
+        </section>
+
+        <section class="chapter">
+          <p class="num">2</p>
+          <h2>why points aren't enough</h2>
+          <div class="prose">
+            <p>point clouds are hard to learn from. there's no order to them, the number of points changes between frames, and the same surface lands in different places each time it's measured. so a model has no consistent target to predict.</p>
+            <p>a grid fixes that. the cells stay in the same place, frame after frame.</p>
+          </div>
+          <figure class="fig fig-wide fig-pair" data-fig="flicker">
+            <video src="media/flicker.mp4" poster="media/flicker.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="Left: a robot arm as points that change every frame. Right: the same frames as voxels, which stay nearly still."></video>
+            <div class="pair-labels"><span>points: <b data-points>3,195</b> this frame</span><span>voxels: <b data-voxels>673</b> this frame</span></div>
+            <figcaption>the same re-measured robot arm. on the left, every point moves each time. on the right, the cells hold.</figcaption>
+          </figure>
+        </section>
+
+        <section class="chapter">
+          <p class="num">3</p>
+          <h2>the voxelization pipeline</h2>
+          <div class="prose">
+            <p>voxelizing means dividing space into small cubes and asking one question of each: did any points land in here?</p>
+          </div>
+          <figure class="fig fig-wide" data-fig="pipeline">
+            <video src="media/pipeline.mp4" poster="media/pipeline.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="The factory point cloud snapping onto a grid, then becoming solid voxels."></video>
+            <ol class="steps">
+              <li data-step="0"><b>capture</b> raw points, in no order</li>
+              <li data-step="1"><b>bin</b> each point falls into a grid cell</li>
+              <li data-step="2"><b>merge</b> each occupied cell averages its points' color</li>
+              <li data-step="3" class="on"><b>keep it sparse</b> store only the occupied cells</li>
+            </ol>
+            <figcaption>300,000 points become 29,237 voxels. a full grid over this scene would need 232,939 cells, so we keep about 12.6% of them.</figcaption>
+          </figure>
+          <div class="prose">
+            <p>that last step is where the name comes from. most of the world is air, so most of a 3d grid is empty. store only the cells that hold something, and a whole building becomes small enough to work with.</p>
+          </div>
+        </section>
+
+        <section class="chapter">
+          <p class="num">4</p>
+          <h2>choosing the resolution</h2>
+          <div class="prose">
+            <p>voxel size is a trade. large cells are cheap and show you the shape of a room. small ones show you a handle, a helmet, a hand, but the count grows quickly. halve the size, and a surface takes about four times as many cells.</p>
+          </div>
+          <figure class="fig fig-wide" data-fig="resolution">
+            <div class="stage">
+              <video src="media/resolution.mp4" poster="media/resolution.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="The same factory voxelized at four sizes, from coarse to fine."></video>
+              <div class="quad-labels"><span>80 cm: <b>1,383</b> cells</span><span>40 cm: <b>5,435</b> cells</span><span>20 cm: <b>24,336</b> cells</span><span>10 cm: <b>99,614</b> cells</span></div>
+            </div>
+            <figcaption>the same scene at four cell sizes, with the real cell count for each.</figcaption>
+          </figure>
+        </section>
+
+        <section class="chapter">
+          <p class="num">5</p>
+          <h2>drones</h2>
+          <div class="prose">
+            <p>a fixed sensor only sees what it faces. a drone can go and look. it flies over a site and takes in the space under it, and every pass fills in what the last one couldn't see. the holes close, and the map grows into the shape of the building.</p>
+          </div>
+          <figure class="fig fig-wide" data-fig="drone">
+            <video src="media/drone.mp4" poster="media/drone.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="A drone flying rows over a factory, with a voxel map growing beneath it as it scans."></video>
+            <figcaption>a simulated flight. the map contains only what the drone's rays actually hit. <span data-coverage>11,551 voxels mapped.</span></figcaption>
+          </figure>
+        </section>
+
+        <section class="chapter">
+          <p class="num">6</p>
+          <h2>mapping the work</h2>
+          <div class="prose">
+            <p>a building is only half of it. the other half is the work: people walking between stations, forklifts on their routes, the paths everyone repeats through a shift.</p>
+            <p>a static map shows a robot where the walls are. mapping the workforce shows it how a place is actually used.</p>
+          </div>
+          <figure class="fig fig-wide" data-fig="workforce">
+            <video src="media/workforce.mp4" poster="media/workforce.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="Workers and a forklift moving through a gray voxel factory, leaving a growing orange heat map on the floor."></video>
+            <figcaption>simulated workers and a forklift. the floor warms wherever they go, and over time the shape of the work appears.</figcaption>
+          </figure>
+        </section>
+
+        <section class="chapter">
+          <p class="num">7</p>
+          <h2>data generation</h2>
+          <div class="prose">
+            <p>robots learn from data, and real industrial data is scarce. you can't stop a factory to collect it.</p>
+            <p>a structured 3d map changes that, because one capture isn't one example. you can rearrange it, relabel it, and view it from a new angle, and each version is new training data with the answers already known.</p>
+          </div>
+          <figure class="fig fig-wide" data-fig="data">
+            <div class="stage">
+              <video src="media/data.mp4" poster="media/data.jpg" muted loop playsinline preload="none" disablepictureinpicture aria-label="Four versions of one factory: as captured, rearranged, labeled by object type, and as bare geometry."></video>
+              <div class="quad-labels"><span>as captured</span><span>rearranged</span><span>labeled</span><span>geometry only</span></div>
+            </div>
+            <figcaption>four versions of one simulated scene. in the labeled one, every cell already knows what it is.</figcaption>
+          </figure>
+        </section>
+
+        <section class="closing">
+          <p>point clouds to voxels, voxels to maps, maps to data, data to robots that can work in the real world.</p>
+          <p class="fine">every figure on this page is rendered from a simulated factory. none of it is footage or data from a real site.</p>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/site.js"></script>
+<script src="current.js"></script>
+</body>
+</html>
