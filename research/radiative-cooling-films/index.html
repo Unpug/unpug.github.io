@@ -70,6 +70,8 @@
     .affil-logos a { display: block; }
     .affil-logos img { display: block; width: auto; height: var(--h); }
     @media (max-width: 600px) { .affil-logos { gap: .9rem 1.5rem; } .affil-logos img { height: calc(var(--h) * .8); } }
+    /* The header fills the first screen; svh keeps it right under phone browser bars. */
+    main > .hero.is-fullheight:first-child { min-height: 100vh; min-height: 100svh; }
     .content p { line-height: 1.75; }
     blockquote.contrib { border-left: 4px solid #f59e0b; background: #fffbeb; }
     .eq { overflow-x: auto; }
@@ -136,7 +138,7 @@
   <main id="main-content">
 
   <!-- Title -->
-  <section class="hero">
+  <section class="hero is-fullheight">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
