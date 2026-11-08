@@ -61,6 +61,10 @@
     @media (max-width: 768px) { .two-up { grid-template-columns: 1fr; } }
     .author-block.me { font-weight: 700; }
     .affil { font-size: 1rem; color: #4b5563; }
+    .affil-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem 2.75rem; margin: 1.75rem 0 .5rem; }
+    .affil-logos a { display: block; }
+    .affil-logos img { display: block; width: auto; height: var(--h); }
+    @media (max-width: 600px) { .affil-logos { gap: .9rem 1.75rem; } .affil-logos img { height: calc(var(--h) * .72); } }
     .content p { line-height: 1.75; }
     blockquote.contrib { border-left: 4px solid #f59e0b; background: #fffbeb; }
     .eq { overflow-x: auto; }
@@ -145,6 +149,11 @@
               <br><span class="author-block" style="margin-top:.5rem;"><b>Advanced Energy Materials</b> 2025, 15(5), 2403088 · Published online December 5, 2024</span>
               <br><span class="badge badge-gold"><i class="fas fa-star"></i>&nbsp; Frontispiece article</span>
               <span class="badge badge-oa"><i class="fas fa-lock-open"></i>&nbsp; Open access</span>
+            </div>
+
+            <div class="affil-logos">
+              <a href="https://mahidol.ac.th/" target="_blank" rel="noopener"><img src="../logos/mahidol.png" alt="Mahidol University" style="--h:60px"></a>
+              <a href="https://sites.google.com/view/perch-cic" target="_blank" rel="noopener"><img src="../logos/perch-cic.png" alt="Center of Excellence for Innovation in Chemistry (PERCH-CIC)" style="--h:70px"></a>
             </div>
 
             <div class="column has-text-centered">
